@@ -13,6 +13,8 @@ const GLYPH_ANIM_SEC = 0.38 * SPEED;
 const TAGLINE_SLOW_MULT = 1.5;
 const TAGLINE_GLYPH_GAP_SEC = GLYPH_GAP_SEC * TAGLINE_SLOW_MULT;
 const TAGLINE_GLYPH_ANIM_SEC = GLYPH_ANIM_SEC * TAGLINE_SLOW_MULT;
+const COLOUR_SPAN_PATTERN = /<span style="color:(#[0-9a-f]{6})">([^<]*)<\/span>/gi;
+const DIM_COLOUR_THRESHOLD = 140;
 
 function injectGlyphsSequential(
   html: string,
@@ -41,6 +43,43 @@ function wrapAsciiLineByLine(html: string): { html: string; asciiEndSec: number 
   return { html: parts.join(""), asciiEndSec: cursor };
 }
 
+function getColourBrightness(hex: string): number {
+  const value = Number.parseInt(hex.slice(1), 16);
+  const red = (value >> 16) & 255;
+  const green = (value >> 8) & 255;
+  const blue = value & 255;
+  return (red + green + blue) / 3;
+}
+
+function decorateAsciiHtml(html: string): string {
+  const lines = html.replace(/\r\n/g, "\n").trimEnd().split("\n");
+  const totalRows = Math.max(lines.length - 1, 1);
+
+  return lines
+    .map((line, rowIndex) => {
+      const t = rowIndex / totalRows;
+
+      return line.replace(COLOUR_SPAN_PATTERN, (_, colour: string, char: string) => {
+        const isDim = getColourBrightness(colour) < DIM_COLOUR_THRESHOLD;
+        const cycleAttribute = char.trim() ? " data-logo-cycle" : "";
+        return `<span style="color:${colour}" data-logo-t="${t.toFixed(4)}" data-logo-dim="${isDim}"${cycleAttribute}>${char}</span>`;
+      });
+    })
+    .join("\n");
+}
+
+function decorateTaglineHtml(html: string): string {
+  const spanCount = [...html.matchAll(COLOUR_SPAN_PATTERN)].length;
+  const totalGlyphs = Math.max(spanCount - 1, 1);
+  let glyphIndex = 0;
+
+  return html.replace(COLOUR_SPAN_PATTERN, (_, colour: string, char: string) => {
+    const t = glyphIndex / totalGlyphs;
+    glyphIndex += 1;
+    return `<span style="color:${colour}" data-logo-t="${t.toFixed(4)}" data-logo-cycle>${char}</span>`;
+  });
+}
+
 const asciiHtml = ` <span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#5a5e65">╗</span>  <span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#5a5e65">╗</span><span style="color:#5a5e65"> </span>  <span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#e0eafc">█</span><span style="color:#5a5e65">╗</span>
 <span style="color:#dde8fa">█</span><span style="color:#dde8fa">█</span><span style="color:#585d64">╔</span><span style="color:#585d64">═</span><span style="color:#585d64">═</span><span style="color:#dde8fa">█</span><span style="color:#dde8fa">█</span><span style="color:#585d64">╗</span> <span style="color:#dde8fa">█</span><span style="color:#dde8fa">█</span><span style="color:#585d64">╔</span><span style="color:#585d64">═</span><span style="color:#585d64">═</span><span style="color:#dde8fa">█</span><span style="color:#dde8fa">█</span><span style="color:#585d64">╗</span> <span style="color:#dde8fa">█</span><span style="color:#dde8fa">█</span><span style="color:#585d64">╔</span><span style="color:#585d64">═</span><span style="color:#585d64">═</span><span style="color:#585d64">═</span><span style="color:#585d64">═</span><span style="color:#585d64">╝</span>
 <span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#575c63">║</span> <span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#575c63">╔</span><span style="color:#575c63">╝</span> <span style="color:#d9e5f8">█</span><span style="color:#d9e5f8">█</span><span style="color:#575c63">║</span><span style="color:#575c63"> </span><span style="color:#575c63"> </span><span style="color:#575c63"> </span><span style="color:#575c63"> </span><span style="color:#575c63"> </span>
@@ -50,13 +89,13 @@ const asciiHtml = ` <span style="color:#e0eafc">█</span><span style="color:#e0
 
 const taglineHtml = `<span style="color:#e0eafc">a</span><span style="color:#dfeafc">g</span><span style="color:#dfe9fb">e</span><span style="color:#dee9fb">n</span><span style="color:#dde8fb">t</span><span style="color:#dde8fa">i</span><span style="color:#dce7fa">c</span> <span style="color:#dbe6f9">b</span><span style="color:#dae6f9">u</span><span style="color:#d9e5f9">i</span><span style="color:#d9e5f8">l</span><span style="color:#d8e4f8">d</span><span style="color:#d8e4f8">e</span><span style="color:#d7e4f7">r</span><span style="color:#d6e3f7">s</span> <span style="color:#d5e2f6">c</span><span style="color:#d4e2f6">o</span><span style="color:#d4e1f5">l</span><span style="color:#d3e1f5">l</span><span style="color:#d2e0f5">e</span><span style="color:#d2e0f4">c</span><span style="color:#d1dff4">t</span><span style="color:#d0dff4">i</span><span style="color:#d0def3">v</span><span style="color:#cfdef3">e</span>`;
 
-const { html: asciiAnimatedHtml, asciiEndSec } = wrapAsciiLineByLine(asciiHtml);
+const { html: asciiAnimatedHtml, asciiEndSec } = wrapAsciiLineByLine(decorateAsciiHtml(asciiHtml));
 
 const ruleRevealDelaySec = asciiEndSec + AFTER_ASCII_PAUSE_SEC;
 const taglineStartSec = ruleRevealDelaySec + RULE_DRAW_SEC + AFTER_RULE_PAUSE_SEC;
 
 const { html: taglineAnimatedHtml } = injectGlyphsSequential(
-  taglineHtml,
+  decorateTaglineHtml(taglineHtml),
   taglineStartSec,
   TAGLINE_GLYPH_GAP_SEC
 );
@@ -188,15 +227,21 @@ const { html: taglineAnimatedHtml } = injectGlyphsSequential(
     </style>
   </head>
   <body>
-    <div class="logo">
+    <div class="logo" data-logo-reanimate>
       <div class="ascii" set:html={asciiAnimatedHtml}></div>
       <div
         class="rule logo-rule"
+        data-logo-cycle
+        data-logo-rule
         style={`color:#d8e4f8;--logo-del:${ruleRevealDelaySec.toFixed(3)}s;--logo-rule-dur:${RULE_DRAW_SEC}s`}
       >
         ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
       </div>
       <div class="tagline" set:html={taglineAnimatedHtml}></div>
     </div>
+
+    <script>
+      import "../scripts/logo-gradient";
+    </script>
   </body>
 </html>

@@ -68,7 +68,11 @@ a {
 
 .brand-mark {
   align-items: center;
-  background: linear-gradient(135deg, var(--accent) 0%, #0b5e57 100%);
+  background: linear-gradient(
+    135deg,
+    var(--logo-gradient-start, var(--accent)) 0%,
+    var(--logo-gradient-end, #0b5e57) 100%
+  );
   border-radius: 16px;
   color: white;
   display: inline-flex;

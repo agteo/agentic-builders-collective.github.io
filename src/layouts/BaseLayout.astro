@@ -38,7 +38,7 @@ const isCurrent = (href: string) => {
     <div class="shell">
       <header class="site-header">
         <a class="brand" href="/">
-          <span class="brand-mark">ABC</span>
+          <span class="brand-mark" data-logo-cycle>ABC</span>
           <span class="brand-copy">
             <strong>Agentic Builders Collective</strong>
             <span>Builders creating with AI coding tools</span>
@@ -60,5 +60,9 @@ const isCurrent = (href: string) => {
         <slot />
       </main>
     </div>
+
+    <script>
+      import "../scripts/logo-gradient";
+    </script>
   </body>
 </html>
