@@ -263,6 +263,31 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
         animation-duration: var(--taglineGlyphAnimSec);
       }
 
+      /* ── Mobile: keep logo within 90vw (5% margin each side) ── */
+      @media (max-width: 480px) {
+        .logo {
+          padding: 40px 5%;
+        }
+
+        .ascii {
+          font-size: min(26px, 5vw);
+        }
+
+        .rule {
+          font-size: min(26px, 5vw);
+        }
+
+        .tagline {
+          font-size: min(20px, 4vw);
+          letter-spacing: max(1px, 0.8vw);
+          word-spacing: max(2px, 1.6vw);
+        }
+
+        .contact-link {
+          font-size: min(15px, 3.5vw);
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         :global(.logo-glyph) {
           animation: none !important;
