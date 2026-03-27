@@ -117,6 +117,10 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
     >
       @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap');
 
+      :root {
+        --logo-reveal-speed: 1;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -158,8 +162,9 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       :global(.logo-glyph) {
         display: inline;
         opacity: 0;
-        animation: logoGlyphIn var(--glyphAnimSec) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        animation-delay: var(--logo-del, 0s);
+        animation: logoGlyphIn calc(var(--glyphAnimSec) * var(--logo-reveal-speed)) cubic-bezier(0.22, 1, 0.36, 1)
+          forwards;
+        animation-delay: calc(var(--logo-del, 0s) * var(--logo-reveal-speed));
       }
 
       @keyframes logoGlyphIn {
@@ -185,8 +190,8 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       .logo-rule {
         opacity: 0;
         clip-path: inset(0 100% 0 0);
-        animation: logoRuleIn var(--logo-rule-dur, var(--ruleDurFallback)) ease forwards;
-        animation-delay: var(--logo-del, 0s);
+        animation: logoRuleIn calc(var(--logo-rule-dur, var(--ruleDurFallback)) * var(--logo-reveal-speed)) ease forwards;
+        animation-delay: calc(var(--logo-del, 0s) * var(--logo-reveal-speed));
       }
 
       @keyframes logoRuleIn {
@@ -210,7 +215,7 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       .contact-link {
         align-items: center;
         animation: contactFadeIn 0.5s ease forwards;
-        animation-delay: var(--contactFadeDelaySec);
+        animation-delay: calc(var(--contactFadeDelaySec) * var(--logo-reveal-speed, 1));
         bottom: 28px;
         display: inline-flex;
         font-family: 'Space Mono', 'Courier New', monospace;
@@ -264,7 +269,7 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       }
 
       .tagline :global(.logo-glyph) {
-        animation-duration: var(--taglineGlyphAnimSec);
+        animation-duration: calc(var(--taglineGlyphAnimSec) * var(--logo-reveal-speed));
       }
 
       /* ── Mobile: keep logo within 90vw (5% margin each side) ── */
@@ -318,7 +323,7 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
     </style>
   </head>
   <body>
-    <div class="logo" data-logo-reanimate>
+    <div class="logo" data-logo-reanimate data-logo-reveal-duration={taglineEndSec.toFixed(3)}>
       <div class="ascii" set:html={asciiAnimatedHtml}></div>
       <div
         class="rule logo-rule"
@@ -339,6 +344,46 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       <span class="contact-link-icon" aria-hidden="true">✉</span>
       <span class="contact-link-greeting">hello</span><span class="contact-link-at">@</span><span class="contact-link-host">agenticbuilders.sg</span>
     </a>
+
+    <script>
+      (function () {
+        const STORAGE_KEY = "abc-logo-reveal-seen";
+        const FAST_SPEED_MULTIPLIER = 0.4;
+        const root = document.documentElement;
+
+        function getRevealDurationMs() {
+          const logo = document.querySelector("[data-logo-reveal-duration]");
+          const value = logo?.dataset.logoRevealDuration;
+          const parsed = Number.parseFloat(value ?? "");
+          if (!Number.isFinite(parsed)) {
+            return 12000;
+          }
+          return Math.max(parsed * 1000, 900);
+        }
+
+        function setRevealSpeed(speed) {
+          root.style.setProperty("--logo-reveal-speed", String(speed));
+        }
+
+        let hasSeen = false;
+        try {
+          hasSeen = window.localStorage.getItem(STORAGE_KEY) === "true";
+        } catch {}
+
+        if (hasSeen) {
+          setRevealSpeed(FAST_SPEED_MULTIPLIER);
+        } else {
+          setRevealSpeed(1);
+          try {
+            window.localStorage.setItem(STORAGE_KEY, "true");
+          } catch {}
+
+          window.setTimeout(() => {
+            setRevealSpeed(FAST_SPEED_MULTIPLIER);
+          }, getRevealDurationMs());
+        }
+      })();
+    </script>
 
     <script>
       import "../scripts/logo-gradient";
