@@ -224,6 +224,10 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
         white-space: nowrap;
       }
 
+      .calendar-link {
+        bottom: 64px;
+      }
+
       .contact-link-icon {
         color: #777;
         display: inline-block;
@@ -286,6 +290,10 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
         .contact-link {
           font-size: min(15px, 3.5vw);
         }
+
+        .calendar-link {
+          bottom: 54px;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -322,6 +330,10 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       </div>
       <div class="tagline" set:html={taglineAnimatedHtml}></div>
     </div>
+
+    <a class="contact-link calendar-link" href="/meetups/">
+      <span class="contact-link-greeting">events</span><span class="contact-link-at">@</span><span class="contact-link-host">/meetups/</span>
+    </a>
 
     <a class="contact-link" href="mailto:hello@agenticbuilders.sg">
       <span class="contact-link-icon" aria-hidden="true">✉</span>
