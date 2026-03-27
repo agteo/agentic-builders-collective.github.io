@@ -99,6 +99,23 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
   taglineStartSec,
   TAGLINE_GLYPH_GAP_SEC
 );
+
+const navLinks = [
+  { href: "/", label: "home" },
+  { href: "/people/", label: "people" },
+  { href: "/resources/", label: "links" },
+  { href: "/shares/", label: "shares" },
+  { href: "/meetups/", label: "meetups" },
+  { href: "/tips/", label: "tips" }
+];
+
+const isCurrent = (href: string) => {
+  if (href === "/") {
+    return Astro.url.pathname === "/";
+  }
+
+  return Astro.url.pathname.startsWith(href);
+};
 ---
 
 <!DOCTYPE html>
@@ -119,6 +136,9 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
 
       :root {
         --logo-reveal-speed: 1;
+        --menu-link: rgba(157, 176, 201, 0.88);
+        --menu-link-active: #ffffff;
+        --menu-link-email-host: rgba(224, 234, 252, 0.88);
       }
 
       * {
@@ -127,8 +147,18 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
         box-sizing: border-box;
       }
 
+      html {
+        background:
+          radial-gradient(circle at 0% 12%, rgba(130, 163, 255, 0.24), transparent 36%),
+          radial-gradient(circle at 98% 15%, rgba(255, 180, 90, 0.16), transparent 38%),
+          radial-gradient(circle at 52% 108%, rgba(35, 54, 100, 0.24), transparent 46%),
+          linear-gradient(180deg, #050717 0%, #040611 55%, #04070f 100%);
+        background-attachment: fixed;
+        min-height: 100%;
+      }
+
       body {
-        background: #000000;
+        background: transparent;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -216,21 +246,77 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
         align-items: center;
         animation: contactFadeIn 0.5s ease forwards;
         animation-delay: calc(var(--contactFadeDelaySec) * var(--logo-reveal-speed, 1));
-        bottom: 28px;
         display: inline-flex;
         font-family: 'Space Mono', 'Courier New', monospace;
         font-size: 15px;
-        left: 50%;
         letter-spacing: 0.08em;
         opacity: 0;
-        position: fixed;
+        position: relative;
         text-decoration: none;
-        transform: translateX(-50%);
+        text-transform: none;
         white-space: nowrap;
       }
 
-      .calendar-link {
-        bottom: 64px;
+      .home-top-menu {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+        left: 50%;
+        position: fixed;
+        width: calc(100% - 40px);
+        transform: translateX(-50%);
+        top: 28px;
+        z-index: 20;
+      }
+
+      .home-top-links {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        justify-content: center;
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      .home-top-links .current {
+        color: var(--menu-link-active);
+      }
+
+      .home-top-menu a {
+        color: var(--menu-link);
+      }
+
+      .home-top-menu .contact-link-email {
+        color: var(--logo-gradient-start, #e0eafc);
+      }
+
+      .home-top-links .contact-link-at {
+        color: #777;
+      }
+
+      .home-top-links .contact-link-host {
+        color: var(--menu-link);
+      }
+
+      .home-bottom-email {
+        color: var(--menu-link);
+        bottom: 28px;
+        left: 50%;
+        position: fixed;
+        text-align: center;
+        transform: translateX(-50%);
+        width: fit-content;
+        z-index: 20;
+      }
+
+      .home-bottom-email .contact-link-greeting {
+        color: var(--logo-gradient-start, #e0eafc);
+      }
+
+      .home-bottom-email .contact-link-at {
+        color: #777;
       }
 
       .contact-link-icon {
@@ -251,7 +337,7 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       }
 
       .contact-link-host {
-        color: rgba(224, 234, 252, 0.88);
+        color: var(--menu-link-email-host);
       }
 
       .contact-link:hover,
@@ -296,9 +382,6 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
           font-size: min(15px, 3.5vw);
         }
 
-        .calendar-link {
-          bottom: 54px;
-        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -336,12 +419,18 @@ const { html: taglineAnimatedHtml, cursorSec: taglineEndSec } = injectGlyphsSequ
       <div class="tagline" set:html={taglineAnimatedHtml}></div>
     </div>
 
-    <a class="contact-link calendar-link" href="/meetups/">
-      <span class="contact-link-greeting">events</span><span class="contact-link-at">@</span><span class="contact-link-host">/meetups/</span>
-    </a>
-
-    <a class="contact-link" href="mailto:hello@agenticbuilders.sg">
-      <span class="contact-link-icon" aria-hidden="true">✉</span>
+    <nav class="home-top-menu">
+      <div class="home-top-links">
+        {
+          navLinks.map((item) => (
+            <a class:list={{ "contact-link": true, current: isCurrent(item.href) }} href={item.href}>
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+    <a class="contact-link contact-link-email home-bottom-email" href="mailto:hello@agenticbuilders.sg">
       <span class="contact-link-greeting">hello</span><span class="contact-link-at">@</span><span class="contact-link-host">agenticbuilders.sg</span>
     </a>
 

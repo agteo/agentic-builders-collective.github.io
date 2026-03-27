@@ -46,10 +46,10 @@ const { events } = Astro.props;
 
 <style>
   .events-calendar {
-    background: var(--panel-strong);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
+    background: transparent;
+    border: 1px dashed var(--line);
+    border-radius: 0;
+    box-shadow: none;
     padding: 24px;
   }
 
@@ -63,8 +63,8 @@ const { events } = Astro.props;
   .calendar-nav-btn {
     align-items: center;
     background: rgba(16, 34, 29, 0.06);
-    border: none;
-    border-radius: 50%;
+    border: 1px solid var(--line);
+    border-radius: 0;
     color: var(--text);
     cursor: pointer;
     display: inline-flex;
@@ -88,27 +88,27 @@ const { events } = Astro.props;
   }
 
   .calendar-today-btn {
-    background: var(--accent-soft);
-    border: none;
-    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 0;
     color: var(--accent);
     cursor: pointer;
     font-family: var(--font-sans);
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 600;
+    letter-spacing: 0.06em;
     margin-left: auto;
-    padding: 7px 16px;
-    transition: background-color 140ms ease, color 140ms ease, transform 140ms ease;
+    padding: 6px 14px;
+    transition: background-color 140ms ease, color 140ms ease;
   }
 
   .calendar-today-btn:hover {
-    background: var(--accent);
-    color: white;
-    transform: translateY(-1px);
+    background: rgba(215, 228, 248, 0.12);
+    color: var(--text);
   }
 
   .calendar-weekdays {
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px dashed var(--line);
     color: var(--muted);
     display: grid;
     font-size: 0.8rem;
@@ -129,7 +129,7 @@ const { events } = Astro.props;
 
   .calendar-grid :global(.calendar-day) {
     align-items: center;
-    border-radius: var(--radius-sm);
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     font-size: 0.92rem;
@@ -163,7 +163,7 @@ const { events } = Astro.props;
   }
 
   .calendar-grid :global(.calendar-day.has-events:hover) {
-    background: rgba(13, 124, 102, 0.08);
+    background: rgba(215, 228, 248, 0.12);
   }
 
   .calendar-grid :global(.calendar-day.has-events:focus-visible) {
@@ -187,10 +187,10 @@ const { events } = Astro.props;
 
   .calendar-grid :global(.event-dot) {
     background: var(--accent);
-    border-radius: 50%;
+    border-radius: 0;
     display: block;
-    height: 5px;
-    width: 5px;
+    height: 4px;
+    width: 4px;
   }
 
   .calendar-grid :global(.calendar-day.selected .event-dot) {
@@ -222,9 +222,9 @@ const { events } = Astro.props;
   }
 
   .calendar-detail :global(.detail-event) {
-    background: rgba(16, 34, 29, 0.03);
+    background: transparent;
     border-left: 3px solid var(--accent);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    border-radius: 0;
     display: grid;
     gap: 6px;
     padding: 14px 16px;
@@ -253,10 +253,11 @@ const { events } = Astro.props;
   }
 
   .calendar-detail :global(.status-badge) {
-    border-radius: 999px;
-    font-size: 0.78rem;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    font-size: 0.76rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     padding: 1px 8px;
     text-transform: uppercase;
   }
@@ -291,7 +292,7 @@ const { events } = Astro.props;
 
   @media (max-width: 640px) {
     .events-calendar {
-      border-radius: 20px;
+      border-radius: 0;
       padding: 16px;
     }
 

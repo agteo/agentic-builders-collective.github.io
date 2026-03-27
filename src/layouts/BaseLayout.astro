@@ -8,13 +8,13 @@ interface Props {
 
 const { title, description = "Agentic Builders Collective" } = Astro.props;
 
-const navigation = [
-  { href: "/", label: "Home" },
-  { href: "/people/", label: "People" },
-  { href: "/resources/", label: "Resources" },
-  { href: "/shares/", label: "Shares" },
-  { href: "/meetups/", label: "Meetups" },
-  { href: "/tips/", label: "Tips" }
+const footerLinks = [
+  { href: "/", label: "home" },
+  { href: "/people/", label: "people" },
+  { href: "/resources/", label: "links" },
+  { href: "/shares/", label: "shares" },
+  { href: "/meetups/", label: "meetups" },
+  { href: "/tips/", label: "tips" }
 ];
 
 const isCurrent = (href: string) => {
@@ -43,30 +43,36 @@ const isCurrent = (href: string) => {
     <title>{title}</title>
   </head>
   <body>
+    <nav class="site-top-menu" aria-label="Primary">
+      <div class="site-top-links">
+        {
+          footerLinks.map((item) => (
+            <a href={item.href} class:list={{ current: isCurrent(item.href) }}>
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
     <div class="shell">
       <header class="site-header">
         <a class="brand" href="/">
+          <span class="brand-prompt">&gt;</span>
           <span class="brand-mark" data-logo-cycle>ABC</span>
-          <span class="brand-copy">
-            <strong>Agentic Builders Collective</strong>
-            <span>Builders creating with AI coding tools</span>
-          </span>
+          <span class="brand-cursor">_</span>
         </a>
-
-        <nav class="site-nav" aria-label="Primary">
-          {
-            navigation.map((item) => (
-              <a href={item.href} class:list={{ current: isCurrent(item.href) }}>
-                {item.label}
-              </a>
-            ))
-          }
-        </nav>
       </header>
 
       <main class="page">
         <slot />
       </main>
+
+      <footer class="site-footer">
+        <a class="footer-email" href="mailto:hello@agenticbuilders.sg">
+          <span class="footer-email-user">hello</span><span class="footer-email-at">@</span><span class="footer-email-host">agenticbuilders.sg</span>
+        </a>
+      </footer>
     </div>
 
     <script>
