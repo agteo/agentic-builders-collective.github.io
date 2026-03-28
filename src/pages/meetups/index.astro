@@ -2,24 +2,10 @@
 import { getCollection } from "astro:content";
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import EventsCalendar from "../../components/EventsCalendar.astro";
 import { formatDateTime } from "../../lib/format";
 
 const meetups = await getCollection("meetups");
 const now = Date.now();
-
-const calendarEvents = meetups.map((m) => ({
-  id: m.id,
-  title: m.data.title,
-  startsAt: m.data.startsAt.toISOString(),
-  endsAt: m.data.endsAt?.toISOString(),
-  status: m.data.status,
-  city: m.data.city,
-  venue: m.data.venue,
-  registrationUrl: m.data.registrationUrl,
-  summary: m.data.summary,
-  hosts: m.data.hosts,
-}));
 
 const upcoming = meetups
   .filter((meetup) => meetup.data.startsAt.getTime() >= now && meetup.data.status !== "cancelled")
@@ -45,15 +31,6 @@ const archive = meetups
   <section>
     <div class="section-heading">
       <div>
-        <h2>Calendar</h2>
-      </div>
-    </div>
-    <EventsCalendar events={calendarEvents} />
-  </section>
-
-  <section>
-    <div class="section-heading">
-      <div>
         <h2>Upcoming</h2>
       </div>
     </div>
@@ -69,15 +46,8 @@ const archive = meetups
                   <span>{formatDateTime(meetup.data.startsAt)}</span>
                   {meetup.data.city && <span>{meetup.data.city}</span>}
                   {meetup.data.venue && <span>{meetup.data.venue}</span>}
-                  <span>{meetup.data.status}</span>
                 </div>
               </div>
-
-              {meetup.data.summary && <p>{meetup.data.summary}</p>}
-
-              {meetup.data.hosts.length > 0 && (
-                <p>Hosts: {meetup.data.hosts.join(", ")}</p>
-              )}
 
               {meetup.data.registrationUrl && (
                 <p>
@@ -87,7 +57,7 @@ const archive = meetups
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Registration
+                    Register
                   </a>
                 </p>
               )}
@@ -119,11 +89,8 @@ const archive = meetups
                 <div class="card-meta">
                   <span>{formatDateTime(meetup.data.startsAt)}</span>
                   {meetup.data.city && <span>{meetup.data.city}</span>}
-                  <span>{meetup.data.status}</span>
                 </div>
               </div>
-
-              {meetup.data.summary && <p>{meetup.data.summary}</p>}
 
               {meetup.data.notesUrl && (
                 <p>

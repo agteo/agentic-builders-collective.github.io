@@ -64,11 +64,21 @@ const isCurrent = (href: string) => {
       <main class="page">
         <slot />
       </main>
+
+      <a class="site-email" href="mailto:hello@agenticbuilders.sg">
+        <span class="footer-email-user">hello</span><span class="footer-email-at">@</span><span class="footer-email-host">agenticbuilders.sg</span>
+      </a>
     </div>
 
-    <a class="fixed-email" href="mailto:hello@agenticbuilders.sg">
-      <span class="footer-email-user">hello</span><span class="footer-email-at">@</span><span class="footer-email-host">agenticbuilders.sg</span>
-    </a>
+    <script>
+      const menus = document.querySelectorAll('.site-top-menu, .home-top-menu');
+      function onScroll() {
+        const scrolled = window.scrollY > 10;
+        menus.forEach(m => m.classList.toggle('scrolled', scrolled));
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    </script>
 
     <script>
       import "../scripts/logo-gradient";
