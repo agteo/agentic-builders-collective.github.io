@@ -158,16 +158,29 @@ const isCurrent = (href: string) => {
 
       body {
         background: transparent;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         min-height: 100vh;
         font-family: 'JetBrains Mono', 'Courier New', monospace;
+        margin: 0;
+      }
+
+      .home-shell {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding: 0 20px 28px;
+      }
+
+      .home-main {
+        align-items: center;
+        display: flex;
+        flex: 1 0 auto;
+        justify-content: center;
+        min-height: 100vh;
       }
 
       .logo {
-        text-align: center;
         padding: 72px;
+        text-align: center;
       }
 
       .ascii {
@@ -301,13 +314,10 @@ const isCurrent = (href: string) => {
 
       .home-bottom-email {
         color: var(--menu-link);
-        bottom: 28px;
-        left: 50%;
-        position: fixed;
+        margin-top: auto;
+        padding-top: 32px;
         text-align: center;
-        transform: translateX(-50%);
-        width: fit-content;
-        z-index: 20;
+        width: 100%;
       }
 
       .home-bottom-email .contact-link-greeting {
@@ -405,19 +415,6 @@ const isCurrent = (href: string) => {
     </style>
   </head>
   <body>
-    <div class="logo" data-logo-reanimate data-logo-reveal-duration={taglineEndSec.toFixed(3)}>
-      <div class="ascii" set:html={asciiAnimatedHtml}></div>
-      <div
-        class="rule logo-rule"
-        data-logo-cycle
-        data-logo-rule
-        style={`color:#d8e4f8;--logo-del:${ruleRevealDelaySec.toFixed(3)}s;--logo-rule-dur:${RULE_DRAW_SEC}s`}
-      >
-        ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
-      </div>
-      <div class="tagline" set:html={taglineAnimatedHtml}></div>
-    </div>
-
     <nav class="home-top-menu">
       <div class="home-top-links">
         {
@@ -429,9 +426,27 @@ const isCurrent = (href: string) => {
         }
       </div>
     </nav>
-    <a class="contact-link contact-link-email home-bottom-email" href="mailto:hello@agenticbuilders.sg">
-      <span class="contact-link-greeting">hello</span><span class="contact-link-at">@</span><span class="contact-link-host">agenticbuilders.sg</span>
-    </a>
+
+    <div class="home-shell">
+      <main class="home-main">
+        <div class="logo" data-logo-reanimate data-logo-reveal-duration={taglineEndSec.toFixed(3)}>
+          <div class="ascii" set:html={asciiAnimatedHtml}></div>
+          <div
+            class="rule logo-rule"
+            data-logo-cycle
+            data-logo-rule
+            style={`color:#d8e4f8;--logo-del:${ruleRevealDelaySec.toFixed(3)}s;--logo-rule-dur:${RULE_DRAW_SEC}s`}
+          >
+            ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+          </div>
+          <div class="tagline" set:html={taglineAnimatedHtml}></div>
+        </div>
+      </main>
+
+      <a class="contact-link contact-link-email home-bottom-email" href="mailto:hello@agenticbuilders.sg">
+        <span class="contact-link-greeting">hello</span><span class="contact-link-at">@</span><span class="contact-link-host">agenticbuilders.sg</span>
+      </a>
+    </div>
 
     <script>
       (function () {

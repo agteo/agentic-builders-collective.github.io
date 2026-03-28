@@ -47,6 +47,8 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   min-height: 100vh;
 }
@@ -58,9 +60,14 @@ a {
 /* ── Shell ── */
 
 .shell {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
   margin: 0 auto;
   max-width: 1120px;
+  min-height: 100vh;
   padding: 64px 20px 80px;
+  width: 100%;
 }
 
 /* ── Brand (pinned top-left) ── */
@@ -161,7 +168,7 @@ a {
   color: var(--menu-link-active);
 }
 
-/* ── Email (bottom of page, not fixed) ── */
+/* ── Email (bottom when short, natural when long) ── */
 
 .site-email {
   color: var(--muted);
@@ -169,8 +176,8 @@ a {
   font-family: var(--font-sans);
   font-size: 0.82rem;
   letter-spacing: 0.08em;
-  margin-top: 48px;
-  padding: 24px 0;
+  margin-top: auto;
+  padding: 48px 0 24px;
   text-align: center;
   text-decoration: none;
 }
@@ -420,6 +427,17 @@ p {
 
 .section-heading p {
   max-width: 58ch;
+}
+
+.section-label {
+  color: var(--muted);
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin: 0 0 14px;
+  padding-left: 2.6ch;
 }
 
 /* ── Grid ── */
