@@ -529,7 +529,7 @@ const isCurrent = (href: string) => {
 
         function getRevealDurationMs() {
           const logo = document.querySelector("[data-logo-reveal-duration]");
-          const value = logo?.dataset.logoRevealDuration;
+          const value = (logo as HTMLElement | null)?.dataset.logoRevealDuration;
           const parsed = Number.parseFloat(value ?? "");
           if (!Number.isFinite(parsed)) {
             return 12000;
@@ -537,7 +537,7 @@ const isCurrent = (href: string) => {
           return Math.max(parsed * 1000, 900);
         }
 
-        function setRevealSpeed(speed) {
+        function setRevealSpeed(speed: number) {
           root.style.setProperty("--logo-reveal-speed", String(speed));
         }
 
