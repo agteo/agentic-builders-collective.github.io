@@ -1,5 +1,21 @@
 ---
 import "../styles/global.css";
+import { getCollection } from "astro:content";
+
+const allBlog = await getCollection("blog");
+const allEvents = await getCollection("events");
+const allFaq = await getCollection("faq");
+
+const latestPosts = allBlog
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
+
+const now = new Date();
+const upcomingEvent = allEvents
+  .filter((e) => e.data.status === "upcoming" || new Date(e.data.date) >= now)
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime())[0] ?? null;
+
+const whatsappUrl = "https://chat.whatsapp.com/Be8X9lVJQET4JfkKMW5Qxn";
 
 /** Scales base timings (0.8 then ×0.75 ≈ another 25% faster). */
 const SPEED = 0.6;
@@ -110,8 +126,6 @@ const navLinks = [
   { href: "/events/", label: "events" },
   { href: "/contact/", label: "contact" }
 ];
-
-const whatsappUrl = "https://chat.whatsapp.com/Be8X9lVJQET4JfkKMW5Qxn";
 
 const isCurrent = (href: string) => {
   if (href === "/") {
@@ -271,6 +285,93 @@ const isCurrent = (href: string) => {
 
       }
 
+      /* ── Homepage content sections ── */
+
+      .home-hero-section {
+        margin-top: 16px;
+        text-align: center;
+      }
+
+      .home-hero-tagline {
+        color: var(--text);
+        font-size: 0.92rem;
+        font-weight: 500;
+        line-height: 1.75;
+        max-width: 56ch;
+        margin: 0 auto;
+      }
+
+      .home-hero-sub {
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.75;
+        margin: 8px auto 0;
+        max-width: 56ch;
+      }
+
+      .home-hero-ctas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .home-section {
+        margin-top: 48px;
+      }
+
+      .home-steps {
+        display: grid;
+        gap: 16px;
+      }
+
+      .faq-list {
+        display: grid;
+        gap: 2px;
+      }
+
+      .faq-item {
+        border-left: 3px solid var(--line);
+        padding: 14px 20px;
+        transition: border-color 150ms ease;
+      }
+
+      .faq-item[open] {
+        border-left-color: var(--accent);
+      }
+
+      .faq-question {
+        color: var(--text);
+        cursor: pointer;
+        font-family: var(--font-sans);
+        font-size: 0.92rem;
+        font-weight: 500;
+        list-style: none;
+      }
+
+      .faq-question::-webkit-details-marker {
+        display: none;
+      }
+
+      .faq-question::before {
+        content: "+ ";
+        color: var(--muted);
+        opacity: 0.5;
+      }
+
+      .faq-item[open] .faq-question::before {
+        content: "- ";
+      }
+
+      .faq-answer {
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.75;
+        margin-top: 10px;
+        padding-left: 1.4ch;
+      }
+
       @media (prefers-reduced-motion: reduce) {
         :global(.logo-glyph) {
           animation: none !important;
@@ -340,6 +441,110 @@ const isCurrent = (href: string) => {
           <div class="tagline" set:html={taglineAnimatedHtml}></div>
         </div>
       </main>
+
+      <!-- Hero tagline + CTAs -->
+      <section class="home-hero-section">
+        <p class="home-hero-tagline">A Singapore community of builders exploring agentic coding with Claude Code, Codex, Cursor, and beyond.</p>
+        <p class="home-hero-sub">We share projects, tips, and experiments — in a WhatsApp chat and at monthly meetups.</p>
+        <div class="home-hero-ctas">
+          <a class="button button-primary" href={whatsappUrl} target="_blank" rel="noopener">Join the Chat</a>
+          <a class="button button-secondary" href="#getting-started">Get Started ↓</a>
+        </div>
+      </section>
+
+      <!-- Getting Started -->
+      <section class="home-section" id="getting-started">
+        <h2 class="section-label">Getting Started</h2>
+        <div class="home-steps">
+          <div class="card">
+            <h3>1. Join the WhatsApp chat</h3>
+            <p>Our main hub for tips, troubleshooting, and project sharing.</p>
+            <a class="muted-link" href={whatsappUrl} target="_blank" rel="noopener">Join now</a>
+          </div>
+          <div class="card">
+            <h3>2. Pick a tool</h3>
+            <p><strong>Claude Code</strong> — terminal-first, free web tier with $250 credits.
+            <strong>Codex</strong> — OpenAI's coding agent, free tier available.
+            <strong>Cursor</strong> — visual IDE with AI built in.</p>
+          </div>
+          <div class="card">
+            <h3>3. Build something</h3>
+            <p>Start with a simple CRUD app. Try the exercises from our Lorong AI workshop.</p>
+            <a class="muted-link" href="https://tk.sg/agentic-coding-notes" target="_blank" rel="noopener">Workshop notes</a>
+          </div>
+          <div class="card">
+            <h3>4. Share it</h3>
+            <p>Add your project to the Showcase via PR — or just share it in the chat.</p>
+            <a class="muted-link" href="/showcase/">View Showcase</a>
+          </div>
+          <div class="card">
+            <h3>5. Come to the next meetup</h3>
+            <p>Monthly meetups at venues around Singapore. Talks, demos, and hands-on sessions.</p>
+            <a class="muted-link" href="/events/">See events</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Latest from Community -->
+      {latestPosts.length > 0 && (
+        <section class="home-section">
+          <h2 class="section-label">Latest from the Community</h2>
+          <div class="list">
+            {latestPosts.map((post) => (
+              <div class="list-item">
+                <div class="list-item-header">
+                  <span class="list-item-title">{post.data.title}</span>
+                  <div class="card-meta">
+                    <span>{new Date(post.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short", day: "numeric" })}</span>
+                    {post.data.author && <span>{post.data.author}</span>}
+                  </div>
+                </div>
+                {post.data.summary && <p>{post.data.summary}</p>}
+              </div>
+            ))}
+          </div>
+          <a class="muted-link" href="/community/" style="margin-top: 8px; display: inline-block;">View all</a>
+        </section>
+      )}
+
+      <!-- Upcoming Event -->
+      <section class="home-section">
+        <h2 class="section-label">Upcoming Event</h2>
+        {upcomingEvent ? (
+          <div class="list-item">
+            <div class="list-item-header">
+              <span class="list-item-title">{upcomingEvent.data.title}</span>
+              <div class="card-meta">
+                <span>{new Date(upcomingEvent.data.date).toLocaleDateString("en-SG", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
+                {upcomingEvent.data.time && <span>{upcomingEvent.data.time}</span>}
+                {upcomingEvent.data.venue && <span>{upcomingEvent.data.venue}</span>}
+              </div>
+            </div>
+            {upcomingEvent.data.registrationUrl && (
+              <a class="button button-primary" href={upcomingEvent.data.registrationUrl} target="_blank" rel="noopener">Register →</a>
+            )}
+          </div>
+        ) : (
+          <div class="card">
+            <p>No upcoming events — <a href={whatsappUrl} target="_blank" rel="noopener" style="color:var(--accent);">join the WhatsApp chat</a> to stay posted.</p>
+          </div>
+        )}
+      </section>
+
+      <!-- FAQ -->
+      {allFaq.length > 0 && (
+        <section class="home-section">
+          <h2 class="section-label">FAQ</h2>
+          <div class="faq-list">
+            {allFaq.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.data.question}</summary>
+                <p class="faq-answer">{item.data.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
       <a class="site-email" href="mailto:hello@agenticbuilders.sg">
         <span class="footer-email-user">hello</span><span class="footer-email-at">@</span><span class="footer-email-host">agenticbuilders.sg</span>
