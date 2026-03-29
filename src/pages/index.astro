@@ -170,7 +170,7 @@ const isCurrent = (href: string) => {
         margin: 0 auto;
         max-width: 800px;
         min-height: 100vh;
-        padding: 0 20px 24px;
+        padding: 64px 20px 24px;
         width: 100%;
       }
 
@@ -400,15 +400,14 @@ const isCurrent = (href: string) => {
         }
         <a href={whatsappUrl} class="nav-cta" target="_blank" rel="noopener">Join WhatsApp →</a>
       </div>
+      <button class="mobile-hamburger" aria-label="Open menu" aria-expanded="false">
+        <svg width="11" height="8" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+          <line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8" x2="22" y2="8" stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
     </nav>
-
-    <button class="mobile-hamburger" aria-label="Open menu" aria-expanded="false">
-      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-        <line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" stroke-width="2"/>
-        <line x1="0" y1="8" x2="22" y2="8" stroke="currentColor" stroke-width="2"/>
-        <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
-      </svg>
-    </button>
 
     <div class="mobile-menu-overlay" aria-hidden="true">
       <nav class="mobile-menu-panel" aria-label="Mobile navigation">
@@ -445,7 +444,6 @@ const isCurrent = (href: string) => {
       <!-- Hero tagline + CTAs -->
       <section class="home-hero-section">
         <p class="home-hero-tagline">A Singapore community of builders exploring agentic coding with Claude Code, Codex, Cursor, and beyond.</p>
-        <p class="home-hero-sub">We share projects, tips, and experiments — in a WhatsApp chat and at monthly meetups.</p>
         <div class="home-hero-ctas">
           <a class="button button-primary" href={whatsappUrl} target="_blank" rel="noopener">Join the Chat</a>
           <a class="button button-secondary" href="#getting-started">Get Started ↓</a>
@@ -454,7 +452,7 @@ const isCurrent = (href: string) => {
 
       <!-- Getting Started -->
       <section class="home-section" id="getting-started">
-        <h2 class="section-label">Getting Started</h2>
+        <h3 class="section-label">Getting Started</h3>
         <div class="home-steps">
           <div class="card">
             <h3>1. Join the WhatsApp chat</h3>
@@ -462,54 +460,26 @@ const isCurrent = (href: string) => {
             <a class="muted-link" href={whatsappUrl} target="_blank" rel="noopener">Join now</a>
           </div>
           <div class="card">
-            <h3>2. Pick a tool</h3>
-            <p><strong>Claude Code</strong> — terminal-first, free web tier with $250 credits.
-            <strong>Codex</strong> — OpenAI's coding agent, free tier available.
-            <strong>Cursor</strong> — visual IDE with AI built in.</p>
-          </div>
-          <div class="card">
-            <h3>3. Build something</h3>
+            <h3>2. Build something</h3>
             <p>Start with a simple CRUD app. Try the exercises from our Lorong AI workshop.</p>
             <a class="muted-link" href="https://tk.sg/agentic-coding-notes" target="_blank" rel="noopener">Workshop notes</a>
           </div>
           <div class="card">
-            <h3>4. Share it</h3>
+            <h3>3. Share it</h3>
             <p>Add your project to the Showcase via PR — or just share it in the chat.</p>
             <a class="muted-link" href="/showcase/">View Showcase</a>
           </div>
           <div class="card">
-            <h3>5. Come to the next meetup</h3>
+            <h3>4. Come to the next meetup</h3>
             <p>Monthly meetups at venues around Singapore. Talks, demos, and hands-on sessions.</p>
             <a class="muted-link" href="/events/">See events</a>
           </div>
         </div>
       </section>
 
-      <!-- Latest from Community -->
-      {latestPosts.length > 0 && (
-        <section class="home-section">
-          <h2 class="section-label">Latest from the Community</h2>
-          <div class="list">
-            {latestPosts.map((post) => (
-              <div class="list-item">
-                <div class="list-item-header">
-                  <span class="list-item-title">{post.data.title}</span>
-                  <div class="card-meta">
-                    <span>{new Date(post.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short", day: "numeric" })}</span>
-                    {post.data.author && <span>{post.data.author}</span>}
-                  </div>
-                </div>
-                {post.data.summary && <p>{post.data.summary}</p>}
-              </div>
-            ))}
-          </div>
-          <a class="muted-link" href="/community/" style="margin-top: 8px; display: inline-block;">View all</a>
-        </section>
-      )}
-
       <!-- Upcoming Event -->
       <section class="home-section">
-        <h2 class="section-label">Upcoming Event</h2>
+        <h3 class="section-label">Upcoming Event</h3>
         {upcomingEvent ? (
           <div class="list-item">
             <div class="list-item-header">
@@ -534,7 +504,7 @@ const isCurrent = (href: string) => {
       <!-- FAQ -->
       {allFaq.length > 0 && (
         <section class="home-section">
-          <h2 class="section-label">FAQ</h2>
+          <h3 class="section-label">FAQ</h3>
           <div class="faq-list">
             {allFaq.map((item) => (
               <details class="faq-item">

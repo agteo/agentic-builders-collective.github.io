@@ -7,11 +7,10 @@ const sponsors = await getCollection("sponsors");
 ---
 
 <BaseLayout title="About — ABC">
-  <h1 class="sr-only">About</h1>
-  <h2 class="page-title">About</h2>
+  <h1 class="page-title">About</h1>
 
   <section>
-    <h2 class="section-label">What is ABC</h2>
+    <h3 class="section-label">What is ABC</h3>
     <p>
       The Agentic Builders Collective (ABC) is a Singapore-based community of developers, builders, and tinkerers exploring agentic coding — building software with AI tools like Claude Code, Codex, Cursor, and beyond.
     </p>
@@ -24,7 +23,7 @@ const sponsors = await getCollection("sponsors");
   </section>
 
   <section>
-    <h2 class="section-label">What We Do</h2>
+    <h3 class="section-label">What We Do</h3>
     <div class="grid columns-3">
       <div class="card">
         <h3>WhatsApp Chat</h3>
@@ -42,7 +41,7 @@ const sponsors = await getCollection("sponsors");
   </section>
 
   <section>
-    <h2 class="section-label">Organisers</h2>
+    <h3 class="section-label">Organisers</h3>
     <div class="list">
       {organisers.map((o) => (
         <div class="list-item">
@@ -53,7 +52,6 @@ const sponsors = await getCollection("sponsors");
               {o.data.company && <span>{o.data.company}</span>}
             </div>
           </div>
-          {o.data.tagline && <p>{o.data.tagline}</p>}
           {o.data.linkedin && (
             <a class="muted-link" href={o.data.linkedin} target="_blank" rel="noopener">LinkedIn</a>
           )}
@@ -64,7 +62,7 @@ const sponsors = await getCollection("sponsors");
 
   {sponsors.length > 0 && (
     <section>
-      <h2 class="section-label">Venue & Event Sponsors</h2>
+      <h3 class="section-label">Venue & Event Sponsors</h3>
       <div class="list">
         {sponsors.map((s) => (
           <div class="list-item">
@@ -82,7 +80,7 @@ const sponsors = await getCollection("sponsors");
   )}
 
   <section>
-    <h2 class="section-label">Community Guidelines</h2>
+    <h3 class="section-label">Community Guidelines</h3>
     <div class="card">
       <p>Be polite and respectful. Help others when you can. Don't share private or sensitive information. Keep discussions relevant to agentic coding and building. When contributing to the website, keep changes additive and localised — one file per entry, one PR per change.</p>
     </div>

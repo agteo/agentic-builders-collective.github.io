@@ -133,6 +133,8 @@ a {
 .site-top-menu,
 .home-top-menu {
   align-items: center;
+  background: rgba(2, 4, 12, 0.92);
+  backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -149,8 +151,7 @@ a {
 
 .site-top-menu.scrolled,
 .home-top-menu.scrolled {
-  background: rgba(2, 4, 12, 0.92);
-  backdrop-filter: blur(8px);
+  /* Background now always applied */
 }
 
 .site-top-links,
@@ -305,14 +306,30 @@ a {
   width: fit-content;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .site-top-menu,
   .home-top-menu {
-    display: none !important;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 16px 20px;
+    pointer-events: none;
+  }
+
+  .site-top-menu > *,
+  .home-top-menu > * {
+    pointer-events: auto;
+  }
+
+  .site-top-links,
+  .home-top-links {
+    display: none;
   }
 
   .mobile-hamburger {
     display: flex;
+    position: static;
+    margin-left: auto;
   }
 
   .mobile-menu-overlay {
@@ -425,7 +442,7 @@ a {
 /* ── Page title: // Title ── */
 
 .page-title {
-  color: var(--text);
+  color: var(--logo-gradient-start);
   font-family: var(--font-serif);
   font-size: 0.92rem;
   font-weight: 700;
@@ -453,12 +470,12 @@ h3 {
 }
 
 h1 {
-  color: var(--text);
+  color: var(--logo-gradient-start);
   font-size: 0.92rem;
 }
 
 h2 {
-  color: var(--text);
+  color: var(--logo-gradient-end);
   font-size: 0.92rem;
   font-weight: 500;
 }
@@ -594,14 +611,13 @@ p {
 }
 
 .section-label {
-  color: var(--muted);
+  color: var(--logo-gradient-end);
   display: block;
   font-family: var(--font-sans);
   font-size: 0.92rem;
   font-weight: 400;
   letter-spacing: 0.04em;
   margin: 0 0 14px;
-  opacity: 0.7;
 }
 
 /* ── Grid ── */
@@ -820,7 +836,7 @@ p {
 
 @media (max-width: 640px) {
   .shell {
-    padding: 48px 14px 40px;
+    padding: 64px 14px 40px;
   }
 
   .site-header,

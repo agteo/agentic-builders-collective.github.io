@@ -28,15 +28,14 @@ for (const [, items] of grouped) {
 ---
 
 <BaseLayout title="Resources — ABC">
-  <h1 class="sr-only">Resources</h1>
-  <h2 class="page-title">Resources</h2>
+  <h1 class="page-title">Resources</h1>
 
   {categoryOrder.map((cat) => {
     const items = grouped.get(cat);
     if (!items || items.length === 0) return null;
     return (
       <section>
-        <h2 class="section-label">{categoryLabels[cat] ?? cat}</h2>
+        <h3 class="section-label">{categoryLabels[cat] ?? cat}</h3>
         <div class="list">
           {items.map((r) => (
             <div class="list-item">

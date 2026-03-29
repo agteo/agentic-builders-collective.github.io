@@ -19,12 +19,11 @@ const sortedArticles = articles.sort(
 ---
 
 <BaseLayout title="Showcase — ABC">
-  <h1 class="sr-only">Showcase</h1>
-  <h2 class="page-title">Showcase</h2>
+  <h1 class="page-title">Showcase</h1>
 
   {featured.length > 0 && (
     <section>
-      <h2 class="section-label">Featured Projects</h2>
+      <h3 class="section-label">Featured Projects</h3>
       <div class="list">
         {featured.map((project) => (
           <article class="list-item">
@@ -72,63 +71,14 @@ const sortedArticles = articles.sort(
   )}
 
   <section>
-    <h2 class="section-label">All Projects</h2>
-    {others.length === 0 && featured.length === 0 ? (
-      <p>No projects yet. Submit yours via PR!</p>
-    ) : (
-      <div class="list">
-        {others.map((project) => (
-          <article class="list-item">
-            <div class="list-item-header">
-              <span class="list-item-title">
-                {project.data.url ? (
-                  <a href={project.data.url} target="_blank" rel="noopener">{project.data.title}</a>
-                ) : project.data.github ? (
-                  <a href={project.data.github} target="_blank" rel="noopener">{project.data.title}</a>
-                ) : (
-                  project.data.title
-                )}
-              </span>
-              <div class="card-meta">
-                {project.data.author && <span>{project.data.author}</span>}
-                <span>{new Date(project.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short" })}</span>
-              </div>
-            </div>
-            {project.data.summary && <p>{project.data.summary}</p>}
-            {project.data.builtWith.length > 0 && (
-              <ul class="tag-list">
-                {project.data.builtWith.map((tool) => (
-                  <li class="tag">{tool}</li>
-                ))}
-              </ul>
-            )}
-          </article>
-        ))}
-      </div>
-    )}
+    <h3 class="section-label">All Projects</h3>
+    <p>No projects yet. Submit yours via PR!</p>
   </section>
 
-  {sortedArticles.length > 0 && (
-    <section>
-      <h2 class="section-label">Articles by Members</h2>
-      <div class="list">
-        {sortedArticles.map((article) => (
-          <div class="list-item">
-            <div class="list-item-header">
-              <a class="list-item-title" href={article.data.url} target="_blank" rel="noopener">
-                {article.data.title}
-              </a>
-              <div class="card-meta">
-                <span>{article.data.author}</span>
-                {article.data.publication && <span>{article.data.publication}</span>}
-                <span>{new Date(article.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short" })}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  )}
+  <section>
+    <h3 class="section-label">Articles by Members</h3>
+    <p>No articles yet.</p>
+  </section>
 </BaseLayout>
 
 <style>

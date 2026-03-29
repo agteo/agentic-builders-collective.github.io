@@ -1,7 +1,7 @@
 import { dimColour, getGradientColour, logoGradients } from "../lib/logo-gradients";
 
 const LOGO_GRADIENT_SEEN_STORAGE_KEY = "abc-logo-gradient-seen";
-const FIRST_LOAD_GRADIENT_KEY = "ice";
+const FIRST_LOAD_GRADIENT_KEY = "sunset";
 const FIRST_LOAD_GRADIENT_INDEX = Math.max(
   logoGradients.findIndex(({ key }) => key === FIRST_LOAD_GRADIENT_KEY),
   0
@@ -97,9 +97,10 @@ function getInitialLogoGradientIndex(): number {
   // Each subpage gets a consistent gradient
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   const pageGradients: Record<string, string> = {
+    "/": "sunset",
     "/about": "ocean",
     "/community": "mint",
-    "/showcase": "sunset",
+    "/showcase": "gold",
     "/resources": "forest",
     "/events": "nebula",
     "/contact": "coral"

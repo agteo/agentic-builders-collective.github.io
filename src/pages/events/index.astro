@@ -15,11 +15,10 @@ const past = allEvents
 ---
 
 <BaseLayout title="Events — ABC">
-  <h1 class="sr-only">Events</h1>
-  <h2 class="page-title">Events</h2>
+  <h1 class="page-title">Events</h1>
 
   <section>
-    <h2 class="section-label">Upcoming</h2>
+    <h3 class="section-label">Upcoming</h3>
     {upcoming.length === 0 ? (
       <div class="card">
         <p>No upcoming events — <a href="https://chat.whatsapp.com/Be8X9lVJQET4JfkKMW5Qxn" target="_blank" rel="noopener" style="color:var(--accent);">join the WhatsApp chat</a> for announcements.</p>
@@ -46,7 +45,7 @@ const past = allEvents
   </section>
 
   <section>
-    <h2 class="section-label">Past Events</h2>
+    <h3 class="section-label">Past Events</h3>
     {past.length === 0 ? (
       <p>No past events yet.</p>
     ) : (
