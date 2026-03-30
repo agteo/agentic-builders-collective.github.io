@@ -4,6 +4,7 @@ export default defineConfig({
   output: "static",
   site: "https://agentic-builders-collective.github.io",
   server: {
-    host: true
-  }
+    host: true,
+    allowedHosts: ["yjmbpro.local"],
+  },
 });
