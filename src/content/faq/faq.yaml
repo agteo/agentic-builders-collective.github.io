@@ -6,23 +6,19 @@
   order: 2
   question: "Do I need to be a developer to join?"
   answer: "All skill levels are welcome. Many members started with zero agentic coding experience. Our Getting Started guide and community chat are good entry points."
-- id: "is-this-only-about-claude-code"
-  order: 3
-  question: "Is this only about Claude Code?"
-  answer: "Not at all. Members actively use and discuss Cursor, Codex, OpenCode, Lovable, v0, Kilo Code, Google Antigravity, MiniMax, GLM, and more. We're tool-agnostic — if it helps you build, it belongs here."
 - id: "how-much-does-it-cost"
-  order: 4
+  order: 3
   question: "How much does it cost?"
   answer: "The community is completely free. AI tool subscriptions vary — there are free tiers, pay-as-you-go options (like Kilo Code), and subscription plans. Members often share deals and promotions in the chat."
 - id: "how-do-i-attend-a-meetup"
-  order: 5
+  order: 4
   question: "How do I attend a meetup?"
   answer: "We announce events in the WhatsApp chat and on Luma. RSVPs are typically through Luma. Meetups happen roughly monthly at venues around Singapore — past hosts include Google, Lorong AI, Tinkercademy, and Lifelong Learning Institute."
 - id: "how-can-i-contribute-to-the-website"
-  order: 6
+  order: 5
   question: "How can I contribute to the website?"
   answer: "Submit a pull request. You can add yourself to the People directory, submit a project to Showcase, add a resource link, or write a blog post. See CONTRIBUTING.md in the repo for details."
 - id: "wasnt-this-called-claude-code-club"
-  order: 7
+  order: 6
   question: "Wasn't this called Claude Code Club?"
   answer: "Yes. We started as Claude Code Club SG in September 2025. As members began using a wider range of tools — Codex, Cursor, Lovable, OpenCode, Google Antigravity, and more — we rebranded to Agentic Builders Collective (ABC) to reflect the broader scope."
