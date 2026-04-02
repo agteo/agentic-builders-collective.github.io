@@ -93,6 +93,19 @@ tags:
 Write the tip here.
 ```
 
+### `faq`
+
+Directory: `src/content/faq/`
+
+Use YAML for short homepage FAQs. Keep entries in one array and use an explicit `order` field so the front page reads well for someone arriving cold.
+
+```yaml
+- id: what-is-the-agentic-builders-collective
+  order: 1
+  question: What is the Agentic Builders Collective?
+  answer: A short, plain-language explanation of the community and what people do here.
+```
+
 ## Naming guidance
 
 - Use kebab-case filenames.

@@ -106,6 +106,8 @@ const articles = defineCollection({
 const faq = defineCollection({
   loader: file("src/content/faq/faq.yaml"),
   schema: z.object({
+    id: z.string(),
+    order: z.number().int().positive(),
     question: z.string(),
     answer: z.string(),
   }),
