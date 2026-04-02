@@ -30,3 +30,4 @@ This repo is an Astro site for the Agentic Builders Collective. Keep durable beh
 - Standard sizes:
   - `1rem` (15px) for primary text
   - `0.875rem` (~13px) for secondary/meta text
+- Box/card backgrounds use `--box-bg: rgba(30, 30, 40, 0.45)` — neutral grey with slight blue tint, 45% opacity
