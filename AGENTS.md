@@ -22,8 +22,11 @@ This repo is an Astro site for the Agentic Builders Collective. Keep durable beh
 ## Visual design
 
 - Terminal-like theme uses **consistent font sizes** throughout.
+- Base font size is **15px** on `html` element.
 - Do not vary font sizes for hierarchy; instead, differentiate using:
   - **Brighter colours** for headers/important elements (e.g., `--accent`)
   - **Bold weight** for emphasis
   - **Slightly dimmed opacity** for body/secondary text
-- Standard sizes: `0.92rem` for primary text, `0.82rem` for secondary/meta text.
+- Standard sizes:
+  - `1rem` (15px) for primary text
+  - `0.875rem` (~13px) for secondary/meta text
