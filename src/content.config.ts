@@ -5,7 +5,9 @@ import { z } from "astro/zod";
 const people = defineCollection({
   loader: file("src/content/people/people.yaml"),
   schema: z.object({
+    id: z.string().optional().default(""),
     name: z.string(),
+    aliases: z.array(z.string()).default([]),
     tagline: z.string().optional().default(""),
     company: z.string().optional().default(""),
     linkedin: z.string().optional().default(""),
@@ -17,7 +19,9 @@ const people = defineCollection({
 const organisers = defineCollection({
   loader: file("src/content/organisers/organisers.yaml"),
   schema: z.object({
+    id: z.string().optional().default(""),
     name: z.string(),
+    aliases: z.array(z.string()).default([]),
     role: z.string(),
     company: z.string().optional().default(""),
     tagline: z.string().optional().default(""),
@@ -69,11 +73,16 @@ const events = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    kind: z.enum(["meetup", "learning"]).default("meetup"),
     time: z.string().optional().default(""),
     venue: z.string().optional().default(""),
+    venueUrl: z.string().optional().default(""),
+    sponsorName: z.string().optional().default(""),
+    sponsorUrl: z.string().optional().default(""),
     registrationUrl: z.string().optional().default(""),
     attendance: z.number().optional().default(0),
     speakers: z.array(z.string()).default([]),
+    hosts: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     status: z.enum(["upcoming", "past"]).default("past"),
   }),

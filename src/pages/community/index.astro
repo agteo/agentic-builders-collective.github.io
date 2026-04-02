@@ -22,7 +22,7 @@ const otherPeople = allPeople.filter((p) => !p.data.featured && !orgNames.has(p.
     <h3 class="section-label">Organisers</h3>
     <div class="grid columns-2">
       {organisers.map((person) => (
-        <div class="person-card">
+        <div class="person-card" id={person.data.id}>
           <div class="person-card-header">
             <span class="person-card-title">{person.data.name}</span>
             <div class="person-card-meta">

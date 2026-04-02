@@ -1,5 +1,6 @@
 - id: "yj-soon"
   name: "YJ Soon"
+  aliases: []
   role: "Co-organiser"
   company: "Tinkercademy"
   tagline: ""
@@ -10,18 +11,21 @@
   photo: "/images/people/yj.jpg"
 - id: "chris-pecaut"
   name: "Chris Pecaut"
+  aliases: []
   role: "Co-organiser"
   tagline: ""
   linkedin: "https://www.linkedin.com/in/cpecaut/"
   photo: "/images/people/chris.jpg"
 - id: "jensen-loke"
   name: "Jensen Loke"
+  aliases: ["Jensen"]
   role: "Co-organiser"
   company: "Success IT"
   tagline: ""
   linkedin: "https://www.linkedin.com/in/jensenloke/"
 - id: "ian-choo"
   name: "Ian Choo"
+  aliases: []
   role: "Co-organiser"
   company: "SG Code Campus"
   tagline: ""

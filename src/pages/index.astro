@@ -322,6 +322,10 @@ const isCurrent = (href: string) => {
         margin-top: 48px;
       }
 
+      .home-event-register {
+        justify-self: start;
+      }
+
       .home-steps {
         display: grid;
         gap: 16px;
@@ -500,7 +504,7 @@ const isCurrent = (href: string) => {
               </div>
             </div>
             {upcomingEvent.data.registrationUrl && (
-              <a class="button button-primary" href={upcomingEvent.data.registrationUrl} target="_blank" rel="noopener">Register →</a>
+              <a class="button button-primary home-event-register" href={upcomingEvent.data.registrationUrl} target="_blank" rel="noopener">Register →</a>
             )}
           </div>
         ) : (

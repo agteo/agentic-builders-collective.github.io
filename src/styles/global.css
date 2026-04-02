@@ -674,7 +674,7 @@ p {
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.875rem;
+  font-size: 1rem;
   gap: 10px;
   opacity: 0.7;
 }
@@ -868,7 +868,7 @@ p {
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.875rem;
+  font-size: 1rem;
   gap: 8px;
   opacity: 0.8;
 }
@@ -919,7 +919,7 @@ p {
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.875rem;
+  font-size: 1rem;
   gap: 8px;
   opacity: 0.8;
 }
