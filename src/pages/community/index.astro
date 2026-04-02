@@ -20,18 +20,18 @@ const otherPeople = allPeople.filter((p) => !p.data.featured && !orgNames.has(p.
 
   <section>
     <h3 class="section-label">Organisers</h3>
-    <div class="list">
+    <div class="grid columns-2">
       {organisers.map((person) => (
-        <div class="list-item">
-          <div class="list-item-header">
-            <span class="list-item-title">{person.data.name}</span>
-            <div class="card-meta">
+        <div class="person-card">
+          <div class="person-card-header">
+            <span class="person-card-title">{person.data.name}</span>
+            <div class="person-card-meta">
               <span>{person.data.role}</span>
               {person.data.company && <span>{person.data.company}</span>}
             </div>
           </div>
-          {person.data.tagline && <p>{person.data.tagline}</p>}
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          {person.data.tagline && <p class="person-card-tagline">{person.data.tagline}</p>}
+          <div class="person-card-links">
             {person.data.linkedin && (
               <a class="muted-link" href={person.data.linkedin} target="_blank" rel="noopener">LinkedIn</a>
             )}

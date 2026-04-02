@@ -453,26 +453,34 @@ const isCurrent = (href: string) => {
       <!-- Getting Started -->
       <section class="home-section" id="getting-started">
         <h3 class="section-label">Getting Started</h3>
-        <div class="home-steps">
-          <div class="card">
+        <div class="grid columns-2">
+          <div class="person-card">
             <h3>1. Join the WhatsApp chat</h3>
-            <p>Our main hub for tips, troubleshooting, and project sharing.</p>
-            <a class="muted-link" href={whatsappUrl} target="_blank" rel="noopener">Join now</a>
+            <p class="person-card-tagline">Our main hub for tips, troubleshooting, and project sharing.</p>
+            <div class="person-card-links">
+              <a class="muted-link" href={whatsappUrl} target="_blank" rel="noopener">Join now</a>
+            </div>
           </div>
-          <div class="card">
+          <div class="person-card">
             <h3>2. Build something</h3>
-            <p>Start with a simple CRUD app. Try the exercises from our Lorong AI workshop.</p>
-            <a class="muted-link" href="https://tk.sg/agentic-coding-notes" target="_blank" rel="noopener">Workshop notes</a>
+            <p class="person-card-tagline">Start with a simple CRUD app. Try the exercises from our Lorong AI workshop.</p>
+            <div class="person-card-links">
+              <a class="muted-link" href="https://tk.sg/agentic-coding-notes" target="_blank" rel="noopener">Workshop notes</a>
+            </div>
           </div>
-          <div class="card">
+          <div class="person-card">
             <h3>3. Share it</h3>
-            <p>Add your project to the Showcase via PR — or just share it in the chat.</p>
-            <a class="muted-link" href="/showcase/">View Showcase</a>
+            <p class="person-card-tagline">Add your project to the Showcase via PR — or just share it in the chat.</p>
+            <div class="person-card-links">
+              <a class="muted-link" href="/showcase/">View Showcase</a>
+            </div>
           </div>
-          <div class="card">
+          <div class="person-card">
             <h3>4. Come to the next meetup</h3>
-            <p>Monthly meetups at venues around Singapore. Talks, demos, and hands-on sessions.</p>
-            <a class="muted-link" href="/events/">See events</a>
+            <p class="person-card-tagline">Monthly meetups at venues around Singapore. Talks, demos, and hands-on sessions.</p>
+            <div class="person-card-links">
+              <a class="muted-link" href="/events/">See events</a>
+            </div>
           </div>
         </div>
       </section>
