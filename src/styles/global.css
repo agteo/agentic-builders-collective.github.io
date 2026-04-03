@@ -883,7 +883,7 @@ p {
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.875rem;
+  font-size: 1rem;
   gap: 8px;
   opacity: 0.8;
 }
@@ -900,7 +900,7 @@ p {
 
 .person-card-tagline {
   color: var(--text);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
   margin: 0;
   opacity: 0.85;
@@ -913,7 +913,7 @@ p {
 }
 
 .person-card-links .muted-link {
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 /* ── Responsive ── */
