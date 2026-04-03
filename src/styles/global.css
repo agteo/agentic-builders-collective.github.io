@@ -196,6 +196,7 @@ a {
 /* ── Nav CTA button ── */
 
 .nav-cta {
+  align-items: center;
   background: rgba(215, 228, 248, 0.1);
   border: 1px solid rgba(215, 228, 248, 0.25);
   color: var(--accent) !important;
@@ -552,6 +553,7 @@ p {
 }
 
 .button {
+  align-items: center;
   border: 1px solid var(--line);
   border-radius: 0;
   display: inline-flex;
@@ -581,6 +583,14 @@ p {
 .button-secondary:hover {
   background: rgba(215, 228, 248, 0.08);
   color: var(--text);
+}
+
+.inline-arrow {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1;
+  margin-left: 8px;
+  transform: translateY(-1px);
 }
 
 /* ── Stats ── */
@@ -815,9 +825,14 @@ p {
   text-decoration: none;
 }
 
-.muted-link::before {
-  content: "→ ";
+.muted-link::after {
+  content: "▶";
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1;
+  margin-left: 8px;
   opacity: 0.5;
+  transform: translateY(-1px);
 }
 
 .muted-link:hover,

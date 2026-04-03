@@ -20,7 +20,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
 
 <BaseLayout title="Events — ABC">
   <style>
-    .events-muted-link::before {
+    .events-muted-link::after {
       content: none;
     }
 
@@ -63,7 +63,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
               </div>
             </div>
             {event.data.registrationUrl && (
-              <a class="button button-primary events-register" href={event.data.registrationUrl} target="_blank" rel="noopener">Register →</a>
+              <a class="button button-primary events-register" href={event.data.registrationUrl} target="_blank" rel="noopener">Register <span class="inline-arrow" aria-hidden="true">▶</span></a>
             )}
           </div>
         ))}

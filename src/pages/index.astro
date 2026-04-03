@@ -403,7 +403,7 @@ const isCurrent = (href: string) => {
             </a>
           ))
         }
-        <a href={whatsappUrl} class="nav-cta" target="_blank" rel="noopener">Join WhatsApp →</a>
+        <a href={whatsappUrl} class="nav-cta" target="_blank" rel="noopener">Join WhatsApp <span class="inline-arrow" aria-hidden="true">▶</span></a>
       </div>
       <button class="mobile-hamburger" aria-label="Open menu" aria-expanded="false">
         <svg width="13" height="9" viewBox="0 0 22 16" fill="none" aria-hidden="true">
@@ -425,7 +425,7 @@ const isCurrent = (href: string) => {
               </a>
             ))
           }
-          <a href={whatsappUrl} class="nav-cta" target="_blank" rel="noopener">Join WhatsApp →</a>
+          <a href={whatsappUrl} class="nav-cta" target="_blank" rel="noopener">Join WhatsApp <span class="inline-arrow" aria-hidden="true">▶</span></a>
         </div>
       </nav>
     </div>
@@ -504,7 +504,7 @@ const isCurrent = (href: string) => {
               </div>
             </div>
             {upcomingEvent.data.registrationUrl && (
-              <a class="button button-primary home-event-register" href={upcomingEvent.data.registrationUrl} target="_blank" rel="noopener">Register →</a>
+              <a class="button button-primary home-event-register" href={upcomingEvent.data.registrationUrl} target="_blank" rel="noopener">Register <span class="inline-arrow" aria-hidden="true">▶</span></a>
             )}
           </div>
         ) : (
