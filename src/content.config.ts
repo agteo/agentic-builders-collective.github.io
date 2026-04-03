@@ -24,6 +24,7 @@ const organisers = defineCollection({
     aliases: z.array(z.string()).default([]),
     role: z.string(),
     company: z.string().optional().default(""),
+    companyUrl: z.string().optional().default(""),
     tagline: z.string().optional().default(""),
     linkedin: z.string().optional().default(""),
     github: z.string().optional().default(""),

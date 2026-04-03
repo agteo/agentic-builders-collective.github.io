@@ -27,11 +27,22 @@ const otherPeople = allPeople.filter((p) => !p.data.featured && !orgNames.has(p.
             <span class="person-card-title">{person.data.name}</span>
             <div class="person-card-meta">
               <span>{person.data.role}</span>
-              {person.data.company && <span>{person.data.company}</span>}
+              {person.data.company && (
+                <span>
+                  {person.data.companyUrl ? (
+                    <a href={person.data.companyUrl} target="_blank" rel="noopener" style="color: var(--muted); text-decoration: none;">{person.data.company}</a>
+                  ) : (
+                    person.data.company
+                  )}
+                </span>
+              )}
             </div>
           </div>
           {person.data.tagline && <p class="person-card-tagline">{person.data.tagline}</p>}
           <div class="person-card-links">
+            {person.data.website && (
+              <a class="muted-link" href={person.data.website} target="_blank" rel="noopener">Website</a>
+            )}
             {person.data.linkedin && (
               <a class="muted-link" href={person.data.linkedin} target="_blank" rel="noopener">LinkedIn</a>
             )}
