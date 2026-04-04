@@ -25,7 +25,8 @@ This site intentionally uses **GitHub as its content management system**. All da
 
 - **Astro** — static site framework
 - **Astro Content Collections** — typed content and data loading
-- **YAML/Markdown** — human-readable, version-controlled data
+- **Single YAML files** — for structured lists (people, organisers, resources, articles, sponsors, FAQ)
+- **Markdown collections** — for narrative content (events, blog, showcase)
 - **GitHub Pages** — free static hosting
 - **No database** — by design (see Philosophy above)
 
@@ -40,18 +41,33 @@ Open `http://localhost:4321/` during development.
 
 ## Content model
 
-All content lives in `src/content/`:
+Content is defined in [`src/content.config.ts`](./src/content.config.ts). That file shows what exists, how Astro loads it, and which fields are validated.
+
+This repo uses two content patterns:
+
+- `file()` loaders for collections stored as a single YAML array
+- `glob()` loaders for collections stored as one Markdown file per entry
+
+### Where content lives
+
+**Structured YAML files** (edit for short additions):
 
 - `src/content/people/people.yaml` — Community member profiles
 - `src/content/organisers/organisers.yaml` — Event organizers
-- `src/content/showcase/*.md` — Project showcases
 - `src/content/resources/resources.yaml` — Links and resources
 - `src/content/articles/articles.yaml` — External articles
-- `src/content/blog/*.md` — Blog posts
-- `src/content/events/*.md` — Event listings
+- `src/content/sponsors/sponsors.yaml` — Sponsors
 - `src/content/faq/faq.yaml` — Homepage FAQ
 
-See `docs/content-model.md` for field-level guidance and example frontmatter.
+**Markdown files** (add one new file per entry):
+
+- `src/content/events/*.md` — Event listings
+- `src/content/blog/*.md` — Blog posts
+- `src/content/showcase/*.md` — Project showcases
+
+Contributors usually edit a YAML array file for short structured additions, or add one new Markdown file when the content needs body copy and richer formatting.
+
+See `docs/content-model.md` for collection-by-collection guidance and examples.
 
 ## Available scripts
 
@@ -67,6 +83,8 @@ This repo deploys to GitHub Pages via [`.github/workflows/deploy.yml`](./.github
 
 Canonical URL: `https://agentic-builders-collective.github.io/`
 
+For that URL to work as the root `github.io` site, the GitHub repository itself must be named `agentic-builders-collective.github.io`. If the repository stays named `website`, GitHub Pages will publish it as a project site at `https://agentic-builders-collective.github.io/website/` instead.
+
 To deploy:
 
 1. Go to `Settings` -> `Pages` on GitHub
@@ -76,5 +94,6 @@ To deploy:
 ## Notes
 
 - `logo-generator/` is a Git submodule for logo and brand experiments
-- The site uses a **terminal/CLI aesthetic** — single font size (1rem), monospace fonts, minimal hierarchy via color/bold rather than size
+- The site favours **PR-based contribution** over in-browser editing or user submissions
+- **Terminal/CLI aesthetic** — single font size (1rem), monospace fonts, minimal hierarchy via color/bold rather than size
 - Design principle: *"Make it look like a CLI"*
