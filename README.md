@@ -1,13 +1,33 @@
 # Agentic Builders Collective Website
 
-This repository contains the public website for the Agentic Builders Collective. The site is built with Astro and uses a hybrid content model: structured community data lives in YAML, while longer-form tips live in Markdown.
+This repository contains the public website for the Agentic Builders Collective — a Singapore community of builders exploring agentic coding with Claude Code, Codex, Antigravity, and beyond.
+
+## Philosophy: GitHub as CMS
+
+This site intentionally uses **GitHub as its content management system**. All data lives in YAML and Markdown files that are version-controlled, reviewable, and contributed via Pull Requests.
+
+> **Why?** Because we're the Agentic Builders Collective. Contributing to this site should itself be an exercise in using GitHub and AI coding tools — or learning how to with your agent's help.
+
+### How to contribute content
+
+| Page | What to add | File to edit | How |
+|------|-------------|--------------|-----|
+| `/community` | Your profile | `src/content/people/people.yaml` | Add YAML entry, submit PR |
+| `/showcase` | Your project | `src/content/showcase/*.md` | Create Markdown file, submit PR |
+| `/resources` | Links/tools | `src/content/resources/resources.yaml` | Add YAML entry, submit PR |
+| `/events` | Event details | `src/content/events/*.md` | Create Markdown file, submit PR |
+| `/blog` | Blog posts | `src/content/blog/*.md` | Create Markdown file, submit PR |
+| `/articles` | External articles | `src/content/articles/articles.yaml` | Add YAML entry, submit PR |
+
+**Don't know Git?** Ask Claude/Codex/Cursor to help you: *"Help me submit a PR to add my profile to this YAML file."*
 
 ## Stack
 
-- Astro for the site framework
-- Astro content collections for typed content and data loading
-- YAML entries for structured lists such as people, resources, shares, and meetups
-- Markdown for richer editorial content such as tips
+- **Astro** — static site framework
+- **Astro Content Collections** — typed content and data loading
+- **YAML/Markdown** — human-readable, version-controlled data
+- **GitHub Pages** — free static hosting
+- **No database** — by design (see Philosophy above)
 
 ## Getting started
 
@@ -20,38 +40,41 @@ Open `http://localhost:4321/` during development.
 
 ## Content model
 
-The main goal is to make contribution pull requests small and obvious:
+All content lives in `src/content/`:
 
-- `src/data/people/*.yaml`
-- `src/data/resources/*.yaml`
-- `src/data/shares/*.yaml`
-- `src/data/meetups/*.yaml`
-- `src/content/tips/*.md`
+- `src/content/people/people.yaml` — Community member profiles
+- `src/content/organisers/organisers.yaml` — Event organizers
+- `src/content/showcase/*.md` — Project showcases
+- `src/content/resources/resources.yaml` — Links and resources
+- `src/content/articles/articles.yaml` — External articles
+- `src/content/blog/*.md` — Blog posts
+- `src/content/events/*.md` — Event listings
+- `src/content/faq/faq.yaml` — Homepage FAQ
 
 See `docs/content-model.md` for field-level guidance and example frontmatter.
 
 ## Available scripts
 
 ```sh
-pnpm dev
-pnpm build
-pnpm check
+pnpm dev      # Start development server
+pnpm build    # Build for production
+pnpm check    # Type check with Astro
 ```
 
 ## GitHub Pages deployment
 
-This repo is configured to deploy to GitHub Pages via [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) and expects the canonical site URL to be `https://agentic-builders-collective.github.io/`.
+This repo deploys to GitHub Pages via [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml).
 
-For that URL to work as the root `github.io` site, the GitHub repository itself must be named `agentic-builders-collective.github.io`. If the repository stays named `website`, GitHub Pages will publish it as a project site at `https://agentic-builders-collective.github.io/website/` instead.
+Canonical URL: `https://agentic-builders-collective.github.io/`
 
-After the repository name is correct:
+To deploy:
 
-1. Open the repository on GitHub.
-2. Go to `Settings` -> `Pages`.
-3. Set `Source` to `GitHub Actions`.
-4. Push to `main` to trigger the deployment workflow.
+1. Go to `Settings` -> `Pages` on GitHub
+2. Set `Source` to `GitHub Actions`
+3. Push to `main` to trigger deployment
 
 ## Notes
 
-- `logo-generator/` is a Git submodule for logo and brand experiments.
-- The site currently favours PR-based contribution over in-browser editing or user submissions.
+- `logo-generator/` is a Git submodule for logo and brand experiments
+- The site uses a **terminal/CLI aesthetic** — single font size (1rem), monospace fonts, minimal hierarchy via color/bold rather than size
+- Design principle: *"Make it look like a CLI"*
