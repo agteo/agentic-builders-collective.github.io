@@ -12,5 +12,9 @@ speakers: []
 hosts: ["Chris Pecaut", "Ian Choo", "YJ Soon", "Trevor Lum", "Jensen"]
 tags: ["meetup"]
 status: "upcoming"
+
+preEventSurvey:
+  url: "https://docs.google.com/forms/d/e/1FAIpQLSc910rtaWJzZfyJgU4YWGfbJziFJd3n1NZEwzFWxNxU2AN3NA/viewform?usp=header"
+  closesAt: 2026-04-20
 ---
 An evening of agentic coding, hands-on building, and community time with Lorong AI.
