@@ -6,11 +6,11 @@ export interface Props {
 
 const { url, size = 200 } = Astro.props;
 
-import QRCode from 'qrcode';
+import QRCodeLib from 'qrcode';
 
 let dataUrl = '';
 try {
-  dataUrl = await QRCode.toDataURL(url, {
+  dataUrl = await QRCodeLib.toDataURL(url, {
     width: size,
     margin: 2,
     color: {
