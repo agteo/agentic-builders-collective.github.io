@@ -89,7 +89,17 @@ const events = defineCollection({
     preEventSurvey: z.object({
       url: z.string().optional().default(""),
       closesAt: z.coerce.date().optional(),
+      closesAtPlacement: z.enum(["inside", "outside"]).default("inside"),
+      closesAtLabel: z.string().optional().default(""),
       qrEnabled: z.boolean().optional().default(false),
+      qrOpensAt: z.coerce.date().optional(),
+      feedbackEnabled: z.boolean().optional().default(false),
+      takeSurveyLabel: z.string().optional().default("Take survey"),
+      qrToggleLabel: z.string().optional().default("Show survey QR"),
+      feedbackToggleLabel: z.string().optional().default("Show survey results"),
+      qrSectionTitle: z.string().optional().default("Share your feedback"),
+      feedbackSectionTitle: z.string().optional().default("Survey results"),
+      qrHintText: z.string().optional().default("Scan to share your suggestions"),
     }).optional(),
     postEventSurvey: z.object({
       url: z.string().optional().default(""),

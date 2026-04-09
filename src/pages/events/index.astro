@@ -6,6 +6,23 @@ import { getCollection } from "astro:content";
 const allEvents = await getCollection("events");
 const now = new Date();
 const formatTime = (time: string) => time.replace(/\s*SGT$/, "");
+const formatDateKey = (value: Date | string) => {
+  const date = value instanceof Date ? value : new Date(value);
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+};
+const getClosesText = (survey?: {
+  closesAt?: Date | string;
+  closesAtLabel?: string;
+}) => {
+  if (!survey?.closesAt) return "";
+  if (survey.closesAtLabel?.trim()) return survey.closesAtLabel.trim();
+  return `Closes ${new Date(survey.closesAt).toLocaleDateString("en-SG", { month: "short", day: "numeric" })}`;
+};
+const hasFeedbackResults = (feedback?: {
+  rating?: number;
+  responses?: number;
+  highlights?: string[];
+}) => typeof feedback?.rating === "number" || (feedback?.responses ?? 0) > 0 || (feedback?.highlights?.length ?? 0) > 0;
 
 const upcoming = allEvents
   .filter((e) => e.data.status === "upcoming" || new Date(e.data.date) >= now)
@@ -33,8 +50,6 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
       margin-top: 16px;
       padding: 16px;
       background: var(--box-bg, rgba(30, 30, 40, 0.45));
-      border-radius: 12px;
-      border: 1px solid var(--line, rgba(255, 255, 255, 0.08));
     }
 
     .survey-title {
@@ -54,22 +69,13 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
 
     .survey-link:hover {
       color: var(--text);
-      text-decoration: none;
+      text-decoration: underline;
     }
 
     .feedback-section {
       margin-top: 16px;
       padding: 16px;
       background: var(--box-bg, rgba(30, 30, 40, 0.45));
-      border-radius: 12px;
-      border: 1px solid var(--line, rgba(255, 255, 255, 0.08));
-    }
-
-    .feedback-rating {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 8px;
     }
 
     .feedback-highlight {
@@ -77,19 +83,117 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
       border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.08));
     }
 
+    .feedback-rating {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .feedback-rating-meta {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
     .feedback-highlight:last-child {
       border-bottom: none;
     }
 
+    .survey-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .survey-actions > .button {
+      border-color: transparent;
+      min-height: 42px;
+    }
+
+    .events-survey-meta {
+      margin-top: 6px;
+      color: var(--muted);
+      opacity: 0.65;
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    .events-empty-state {
+      color: var(--muted);
+      opacity: 0.65;
+    }
+
+    .events-survey-button {
+      background: rgba(215, 228, 248, 0.09);
+      border-color: rgba(215, 228, 248, 0.22);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .events-survey-button:hover {
+      background: rgba(215, 228, 248, 0.12);
+      color: var(--text);
+    }
+
+    .events-survey-meta-inline {
+      margin-left: 4px;
+      color: var(--muted);
+      opacity: 0.65;
+      font-size: 1rem;
+    }
+
+    .events-panel-toggle {
+      align-items: center;
+      background: rgba(215, 228, 248, 0.04);
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      min-width: 48px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .events-panel-toggle[aria-disabled="true"] {
+      border-color: var(--line);
+      color: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .events-panel-toggle[aria-expanded="true"] {
+      background: rgba(215, 228, 248, 0.08);
+      color: var(--text);
+    }
+
+    .events-panel-icon {
+      display: block;
+      height: 18px;
+      width: 18px;
+    }
+
+    .events-panel-content.is-hidden {
+      display: none;
+    }
+
     .qr-section {
       margin-top: 16px;
-      text-align: center;
+      text-align: left;
     }
 
     .qr-label {
-      font-size: 0.875rem;
+      font-size: 1rem;
       color: var(--muted);
       margin-top: 12px;
+    }
+
+    .events-panel-section.is-hidden {
+      display: none;
     }
   </style>
 
@@ -105,56 +209,149 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
       <div class="list">
         {upcoming.map((event) => (
           <div class="list-item" id={event.id}>
-            <div class="list-item-header">
-              {event.data.registrationUrl ? (
-                <a class="list-item-title" href={event.data.registrationUrl} target="_blank" rel="noopener">{event.data.title}</a>
-              ) : (
-                <span class="list-item-title">{event.data.title}</span>
-              )}
-              <div class="card-meta">
-                <span>{new Date(event.data.date).toLocaleDateString("en-SG", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
-                {event.data.time && <span>{formatTime(event.data.time)}</span>}
-                {event.data.sponsorName && (
-                  <span>
-                    sponsored by{" "}
-                    {event.data.sponsorUrl ? (
-                      <a class="muted-link events-muted-link" href={event.data.sponsorUrl} target="_blank" rel="noopener">{event.data.sponsorName}</a>
+            {(() => {
+              const preSurvey = event.data.preEventSurvey;
+              const qrPanelId = `pre-survey-${event.id}`;
+              const feedbackPanelId = `feedback-${event.id}`;
+              const closesText = getClosesText(preSurvey);
+              const showActionButtons = !!(event.data.registrationUrl || preSurvey?.url);
+              const closesInsideSurvey = closesText && preSurvey?.url && preSurvey.closesAtPlacement === "inside";
+              const closesOutsideSurvey = closesText && preSurvey?.url && preSurvey.closesAtPlacement === "outside";
+              const hasResults = hasFeedbackResults(event.data.feedback);
+              return (
+                <>
+                  <div class="list-item-header">
+                    {event.data.registrationUrl ? (
+                      <a class="list-item-title" href={event.data.registrationUrl} target="_blank" rel="noopener">{event.data.title}</a>
                     ) : (
-                      event.data.sponsorName
+                      <span class="list-item-title">{event.data.title}</span>
                     )}
-                  </span>
-                )}
-              </div>
-            </div>
-            {event.data.registrationUrl && (
-              <a class="button button-primary events-register" href={event.data.registrationUrl} target="_blank" rel="noopener">Register <span class="inline-arrow" aria-hidden="true">▶</span></a>
-            )}
-            
-            {/* Pre-event survey */}
-            {event.data.preEventSurvey?.url && (
-              <div class="survey-section">
-                <div class="survey-title">📋 Help shape this event</div>
-                
-                {/* QR code for pre-event survey (optional) */}
-                {event.data.preEventSurvey.qrEnabled && (
-                  <div class="qr-section" style="margin-bottom: 16px;">
-                    <QRCode url={event.data.preEventSurvey.url} size={150} />
-                    <div class="qr-label">Scan to share your suggestions</div>
+                    <div class="card-meta">
+                      <span>{new Date(event.data.date).toLocaleDateString("en-SG", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
+                      {event.data.time && <span>{formatTime(event.data.time)}</span>}
+                      {event.data.sponsorName && (
+                        <span>
+                          sponsored by{" "}
+                          {event.data.sponsorUrl ? (
+                            <a class="muted-link events-muted-link" href={event.data.sponsorUrl} target="_blank" rel="noopener">{event.data.sponsorName}</a>
+                          ) : (
+                            event.data.sponsorName
+                          )}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                )}
-                
-                {/* Prominent button-style link */}
-                <a class="button button-secondary" href={event.data.preEventSurvey.url} target="_blank" rel="noopener" style="justify-self: start;">
-                  Take Survey <span class="inline-arrow" aria-hidden="true">▶</span>
-                </a>
-                
-                {event.data.preEventSurvey.closesAt && (
-                  <div style="font-size: 0.875rem; color: var(--muted); margin-top: 8px;">
-                    Closes {new Date(event.data.preEventSurvey.closesAt).toLocaleDateString("en-SG", { month: "short", day: "numeric" })}
-                  </div>
-                )}
-              </div>
-            )}
+                  {showActionButtons && (
+                    <div class="survey-actions">
+                      {event.data.registrationUrl && (
+                        <a class="button button-primary events-register" href={event.data.registrationUrl} target="_blank" rel="noopener">
+                          Register <span class="inline-arrow" aria-hidden="true">▶</span>
+                        </a>
+                      )}
+                      {preSurvey?.url && (
+                        <a class="button button-secondary events-survey-button" href={preSurvey.url} target="_blank" rel="noopener">
+                          <span>{preSurvey.takeSurveyLabel || "Take survey"}</span>
+                          <span class="inline-arrow" aria-hidden="true">▶</span>
+                          {closesInsideSurvey && <span class="events-survey-meta-inline">{closesText}</span>}
+                        </a>
+                      )}
+                      {preSurvey?.url && preSurvey.qrEnabled && (
+                        <button
+                          type="button"
+                          class="button button-secondary events-panel-toggle"
+                          data-panel-toggle={qrPanelId}
+                          data-show-label={preSurvey.qrToggleLabel || "Show survey QR"}
+                          data-hide-label="Hide survey QR"
+                          aria-controls={qrPanelId}
+                          aria-expanded="false"
+                          aria-label={preSurvey.qrToggleLabel || "Show survey QR"}
+                          title={preSurvey.qrToggleLabel || "Show survey QR"}
+                          aria-disabled="false"
+                        >
+                          <svg class="events-panel-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M4 4H10V10H4V4ZM6 6V8H8V6H6ZM14 4H20V10H14V4ZM16 6V8H18V6H16ZM4 14H10V20H4V14ZM6 16V18H8V16H6ZM12 12H14V14H12V12ZM14 14H16V16H14V14ZM12 16H14V18H12V16ZM16 16H18V18H16V16ZM18 12H20V14H18V12ZM18 18H20V20H18V18ZM16 20H18V22H16V20ZM20 16H22V18H20V16Z" fill="currentColor" />
+                          </svg>
+                        </button>
+                      )}
+                      {preSurvey?.feedbackEnabled && (
+                        <button
+                          type="button"
+                          class="button button-secondary events-panel-toggle"
+                          data-panel-toggle={feedbackPanelId}
+                          data-show-label={preSurvey.feedbackToggleLabel || "Show survey results"}
+                          data-hide-label="Hide survey results"
+                          aria-controls={feedbackPanelId}
+                          aria-expanded="false"
+                          aria-label={preSurvey.feedbackToggleLabel || "Show survey results"}
+                          title={preSurvey.feedbackToggleLabel || "Show survey results"}
+                          aria-disabled="false"
+                        >
+                          <svg class="events-panel-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 6H19V16H9L5 20V6ZM7 8V15.17L8.17 14H17V8H7ZM9 10H15V12H9V10Z" fill="currentColor" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {preSurvey?.url && preSurvey.qrEnabled && (
+                    <>
+                      <div id={qrPanelId} class="survey-section events-panel-section is-hidden" data-panel>
+                        <div class="survey-title">{preSurvey.qrSectionTitle || "Share your feedback"}</div>
+                        <div
+                          class={`events-empty-state${formatDateKey(now) < formatDateKey(preSurvey.qrOpensAt || event.data.date) ? "" : " is-hidden"}`}
+                          data-panel-empty
+                          data-unlock-date={formatDateKey(preSurvey.qrOpensAt || event.data.date)}
+                        >
+                          Nothing here yet
+                        </div>
+                        <div
+                          class={`events-panel-content${formatDateKey(now) < formatDateKey(preSurvey.qrOpensAt || event.data.date) ? " is-hidden" : ""}`}
+                          data-panel-content
+                          data-unlock-date={formatDateKey(preSurvey.qrOpensAt || event.data.date)}
+                        >
+                          <div class="qr-section" style="margin-bottom: 16px;">
+                            <QRCode url={preSurvey.url} size={150} />
+                            {preSurvey.qrHintText && <div class="qr-label">{preSurvey.qrHintText}</div>}
+                          </div>
+                          <a class="survey-link" href={preSurvey.url} target="_blank" rel="noopener" style="margin-top: 12px;">
+                            Open survey ▶
+                          </a>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {preSurvey?.feedbackEnabled && (
+                    <div id={feedbackPanelId} class="feedback-section events-panel-section is-hidden" data-panel>
+                      <div class="survey-title">{preSurvey.feedbackSectionTitle || "Survey results"}</div>
+                      {!hasResults && (
+                        <div class="events-empty-state">Nothing here yet</div>
+                      )}
+                      {typeof event.data.feedback?.rating === "number" && (
+                        <div class="feedback-rating">
+                          ★ {event.data.feedback.rating.toFixed(1)}{" "}
+                          <span class="feedback-rating-meta">
+                            ({event.data.feedback.responses} responses)
+                          </span>
+                        </div>
+                      )}
+                      {typeof event.data.feedback?.rating !== "number" && (event.data.feedback?.responses ?? 0) > 0 && (
+                        <div class="feedback-rating-meta">({event.data.feedback?.responses} responses)</div>
+                      )}
+                      {event.data.feedback?.highlights && event.data.feedback.highlights.length > 0 && (
+                        <div>
+                          {event.data.feedback.highlights.map((highlight) => (
+                            <div class="feedback-highlight">"{highlight}"</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {closesOutsideSurvey && (
+                    <div class="events-survey-meta">{closesText}</div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         ))}
       </div>
@@ -200,7 +397,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
                   <div class="qr-label">Scan to rate this event</div>
                 </div>
                 <a class="survey-link" href={event.data.postEventSurvey.url} target="_blank" rel="noopener" style="margin-top: 12px;">
-                  Open survey →
+                  Open survey ▶
                 </a>
               </div>
             )}
@@ -210,7 +407,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
               <div class="feedback-section">
                 <div class="feedback-rating">
                   ★ {event.data.feedback.rating.toFixed(1)} 
-                  <span style="font-size: 0.875rem; font-weight: 400; color: var(--muted);">
+                  <span class="feedback-rating-meta">
                     ({event.data.feedback.responses} responses)
                   </span>
                 </div>
@@ -268,7 +465,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
                   <div class="qr-label">Scan to rate this event</div>
                 </div>
                 <a class="survey-link" href={event.data.postEventSurvey.url} target="_blank" rel="noopener" style="margin-top: 12px;">
-                  Open survey →
+                  Open survey ▶
                 </a>
               </div>
             )}
@@ -278,7 +475,7 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
               <div class="feedback-section">
                 <div class="feedback-rating">
                   ★ {event.data.feedback.rating.toFixed(1)} 
-                  <span style="font-size: 0.875rem; font-weight: 400; color: var(--muted);">
+                  <span class="feedback-rating-meta">
                     ({event.data.feedback.responses} responses)
                   </span>
                 </div>
@@ -296,4 +493,55 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
       </div>
     )}
   </section>
+
+  <script>
+    const getLocalDateKey = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    const panelToggles = document.querySelectorAll("[data-panel-toggle]");
+    panelToggles.forEach((toggle) => {
+      const panelId = toggle.getAttribute("data-panel-toggle");
+      if (!panelId) {
+        return;
+      }
+
+      const panel = document.getElementById(panelId);
+      if (!panel) {
+        return;
+      }
+
+      const showLabel = toggle.getAttribute("data-show-label") || "Show survey QR";
+      const hideLabel = toggle.getAttribute("data-hide-label") || "Hide survey QR";
+      toggle.setAttribute("aria-disabled", "false");
+      toggle.setAttribute("aria-label", showLabel);
+      toggle.setAttribute("title", showLabel);
+
+      const gatedContent = panel.querySelectorAll("[data-panel-content]");
+      gatedContent.forEach((content) => {
+        const unlockDate = content.getAttribute("data-unlock-date");
+        const isUnlocked = !unlockDate || getLocalDateKey(new Date()) >= unlockDate;
+        content.classList.toggle("is-hidden", !isUnlocked);
+      });
+
+      const emptyStates = panel.querySelectorAll("[data-panel-empty]");
+      emptyStates.forEach((emptyState) => {
+        const unlockDate = emptyState.getAttribute("data-unlock-date");
+        const isUnlocked = !unlockDate || getLocalDateKey(new Date()) >= unlockDate;
+        emptyState.classList.toggle("is-hidden", isUnlocked);
+      });
+
+      toggle.addEventListener("click", () => {
+        const nowHidden = panel.classList.toggle("is-hidden");
+        const isVisible = !nowHidden;
+        const nextLabel = isVisible ? hideLabel : showLabel;
+        toggle.setAttribute("aria-expanded", String(isVisible));
+        toggle.setAttribute("aria-label", nextLabel);
+        toggle.setAttribute("title", nextLabel);
+      });
+    });
+  </script>
 </BaseLayout>

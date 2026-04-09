@@ -23,13 +23,19 @@ This repo is an Astro site for the Agentic Builders Collective. Keep durable beh
 
 - Terminal-like theme uses **consistent font sizes** throughout.
 - Base font size is **15px** on `html` element.
-- Default to **`1rem` for nearly all visible text**, including cards, body copy, links, and headings where possible.
-- Use smaller text only when there is a clear secondary/meta purpose and no reasonable `1rem` alternative.
+- **Always use `1rem` for all visible text** — no exceptions. This is critical for the terminal-like aesthetic.
 - Do not vary font sizes for hierarchy; instead, differentiate using:
   - **Brighter colours** for headers/important elements (e.g., `--accent`)
   - **Bold weight** for emphasis
   - **Slightly dimmed opacity** for body/secondary text
-- Standard sizes:
-  - `1rem` (15px) for primary text and the default across the interface
-  - `0.875rem` (~13px) only for clearly secondary/meta text when necessary
+- Standard size:
+  - `1rem` (15px) for **all** text including cards, body copy, links, headings, metadata, timestamps, code, everything
+  - `13px` acceptable only for inline symbols/arrows (e.g., ▶ characters)
 - Box/card backgrounds use `--box-bg: rgba(30, 30, 40, 0.45)` — neutral grey with slight blue tint, 45% opacity
+
+## Style change policy
+
+- Do not introduce visual or typography changes unless the user explicitly requests them.
+- Avoid touching global styles or unrelated component styles when a scoped change can satisfy the request.
+- Never alter existing font sizes as part of functional edits unless the change is explicitly about typography.
+- Keep spacing, alignment, and box styling stable unless the user explicitly asks for a visual adjustment.

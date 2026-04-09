@@ -19,13 +19,6 @@ preEventSurvey:
 postEventSurvey:
   url: "https://forms.gle/example-post-event"
   opensAt: 2025-11-26
-  qrEnabled: true
-feedback:
-  rating: 4.5
-  responses: 42
-  highlights:
-    - "Great networking opportunities"
-    - "Loved the hands-on demos"
-    - "SG Code Campus venue was excellent"
+  qrEnabled: false
 ---
 Third meetup at Lifelong Learning Institute, sponsored by SG Code Campus.
