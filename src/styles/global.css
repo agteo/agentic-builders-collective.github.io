@@ -220,7 +220,6 @@ a {
   cursor: pointer;
   display: none;
   font-family: var(--font-sans);
-  font-size: 0.875rem;
   gap: 8px;
   letter-spacing: 0.08em;
   padding: 0;
@@ -362,7 +361,6 @@ a {
   color: var(--muted);
   display: block;
   font-family: var(--font-sans);
-  font-size: 0.875rem;
   letter-spacing: 0.08em;
   margin-top: auto;
   padding: 48px 0 24px;
@@ -439,7 +437,6 @@ a {
 
 .eyebrow {
   color: var(--muted);
-  font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.16em;
   margin: 0 0 16px;
@@ -531,7 +528,6 @@ p {
   background: transparent;
   border-radius: 0;
   color: var(--muted);
-  font-size: 0.875rem;
   border: 1px solid var(--line);
   padding: 5px 10px;
   letter-spacing: 0.04em;
@@ -717,7 +713,6 @@ p {
   background: rgba(215, 228, 248, 0.08);
   border: 1px solid var(--line);
   border-radius: 0;
-  font-size: 0.88em;
   padding: 2px 6px;
 }
 
