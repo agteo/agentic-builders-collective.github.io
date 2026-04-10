@@ -36,7 +36,10 @@ const pastMeetups = past.filter((event) => event.data.kind !== "learning");
 const pastLearning = past.filter((event) => event.data.kind === "learning");
 ---
 
-<BaseLayout title="Events — ABC">
+<BaseLayout
+  title="Events & Meetups"
+  description="See upcoming meetups, workshops, and past sessions from Agentic Builders Collective in Singapore."
+>
   <style>
     .events-muted-link::after {
       content: none;

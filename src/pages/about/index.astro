@@ -5,7 +5,10 @@ import { getCollection } from "astro:content";
 const sponsors = await getCollection("sponsors");
 ---
 
-<BaseLayout title="About — ABC">
+<BaseLayout
+  title="About"
+  description="Learn what Agentic Builders Collective is, how the Singapore community started, what we do, and how to contribute."
+>
   <h1 class="page-title">About</h1>
 
   <section>

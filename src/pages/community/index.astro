@@ -15,7 +15,10 @@ const featuredPeople = allPeople.filter((p) => p.data.featured || orgNames.has(p
 const otherPeople = allPeople.filter((p) => !p.data.featured && !orgNames.has(p.data.name));
 ---
 
-<BaseLayout title="Community — ABC">
+<BaseLayout
+  title="Community"
+  description="Meet the organisers behind Agentic Builders Collective and explore the Singapore community building with AI coding tools."
+>
   <h1 class="page-title">Community</h1>
 
   <section>
