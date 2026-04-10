@@ -1,0 +1,180 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const ascii404 = `██╗  ██╗  ██████╗ ██╗  ██╗
+██║  ██║ ██╔═══██╗██║  ██║
+███████║ ██║   ██║███████║
+╚════██║ ██║   ██║╚════██║
+     ██║ ╚██████╔╝     ██║
+     ╚═╝  ╚═════╝      ╚═╝`;
+
+const tagline = "absent / broken content?";
+
+const suggestions = [
+  {
+    href: "/",
+    label: "Homepage",
+    description: "Start from the main directory and current community overview.",
+  },
+  {
+    href: "/events/",
+    label: "Events",
+    description: "Upcoming meetups, workshops, and recent sessions.",
+  },
+  {
+    href: "/resources/",
+    label: "Resources",
+    description: "Community-curated links, tools, and workflows.",
+  },
+  {
+    href: "/community/",
+    label: "Community",
+    description: "Organisers and people around the collective.",
+  },
+];
+---
+
+<BaseLayout
+  title="404 Not Found"
+  description="The requested page could not be found. Browse the main sections of the Agentic Builders Collective website."
+>
+  <h1 class="sr-only">404 Not Found</h1>
+  <section class="not-found-hero">
+    <div class="not-found-logo" aria-hidden="true">
+      <div class="not-found-ascii">{ascii404}</div>
+      <div class="not-found-rule">┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄</div>
+      <div class="not-found-tagline">{tagline}</div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="section-label">Suggested Routes</h3>
+    <div class="list">
+      {suggestions.map((suggestion) => (
+        <div class="list-item">
+          <a class="list-item-title" href={suggestion.href}>{suggestion.label}</a>
+          <p>{suggestion.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found-hero {
+    display: grid;
+    gap: 24px;
+  }
+
+  .not-found-logo {
+    padding: 12px 0 4px;
+    text-align: center;
+  }
+
+  .not-found-ascii {
+    color: #fff;
+    display: inline-block;
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    transform: skewX(-18deg);
+    white-space: pre;
+  }
+
+  .not-found-rule {
+    color: #fff;
+    display: inline-block;
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 26px;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    white-space: pre;
+  }
+
+  .not-found-tagline {
+    color: #fff;
+    font-family: "Space Mono", "Courier New", monospace;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    line-height: 1.6;
+    text-transform: none;
+    white-space: nowrap;
+  }
+
+  .section-label,
+  .page-title,
+  h1,
+  .list-item-title,
+  .list-item p {
+    color: #fff;
+  }
+
+  .page-title::before {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  :global(.brand-mark),
+  :global(.brand-cursor),
+  :global(.site-top-menu a),
+  :global(.home-top-menu a),
+  :global(.site-top-links .current),
+  :global(.home-top-links .current),
+  :global(.site-email),
+  :global(.footer-email-user),
+  :global(.footer-email-host),
+  :global(.footer-email-at) {
+    -webkit-text-fill-color: currentColor;
+    background: none;
+    color: #fff;
+  }
+
+  :global(.brand-prompt) {
+    color: #fff;
+    opacity: 0.7;
+  }
+
+  :global(.site-top-links a + a::before),
+  :global(.home-top-links a + a::before) {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  :global(.nav-cta) {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #fff !important;
+  }
+
+  :global(.nav-cta:hover) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  :global(.mobile-hamburger),
+  :global(.mobile-close),
+  :global(.mobile-menu-links a),
+  :global(.mobile-menu-links a.current) {
+    color: #fff;
+  }
+
+  .list-item {
+    border-left-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .list-item:hover {
+    border-left-color: #fff;
+  }
+
+  @media (max-width: 720px) {
+    .not-found-ascii,
+    .not-found-rule {
+      font-size: min(26px, 4.9vw);
+    }
+
+    .not-found-tagline {
+      font-size: min(20px, 3.7vw);
+      letter-spacing: max(1px, 0.7vw);
+    }
+  }
+</style>
