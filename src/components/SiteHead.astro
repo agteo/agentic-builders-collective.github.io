@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 
 const trimmedTitle = title?.trim();
-const fullTitle = trimmedTitle ? `${trimmedTitle} | ${siteName}` : siteName;
+const fullTitle = trimmedTitle ? `${trimmedTitle} • ${siteName}` : siteName;
 const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 const imageUrl = new URL(image, Astro.site ?? Astro.url).toString();
 ---
