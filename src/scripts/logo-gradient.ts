@@ -14,16 +14,18 @@ declare global {
   }
 }
 
-function applyLogoGradient(index: number): void {
+let gradientPaintFrame = 0;
+
+function getSafeGradient(index: number) {
   const safeIndex = ((index % logoGradients.length) + logoGradients.length) % logoGradients.length;
   const gradient = logoGradients[safeIndex];
 
   window.__abcLogoGradientIndex = safeIndex;
 
-  document.documentElement.style.setProperty("--logo-gradient-start", gradient.colors[0]);
-  document.documentElement.style.setProperty("--logo-gradient-end", gradient.colors[1]);
-  document.body?.setAttribute("data-logo-gradient", gradient.key);
+  return gradient;
+}
 
+function paintGradientElements(gradient: (typeof logoGradients)[number]): void {
   document.querySelectorAll<HTMLElement>("[data-logo-t]").forEach((element) => {
     const t = Number.parseFloat(element.dataset.logoT ?? "0.5");
     const baseColour = getGradientColour(gradient.colors, Number.isFinite(t) ? t : 0.5);
@@ -33,6 +35,32 @@ function applyLogoGradient(index: number): void {
   document.querySelectorAll<HTMLElement>("[data-logo-rule]").forEach((element) => {
     element.style.color = getGradientColour(gradient.colors, 0.5);
   });
+}
+
+function scheduleGradientPaint(gradient: (typeof logoGradients)[number]): void {
+  if (gradientPaintFrame) {
+    cancelAnimationFrame(gradientPaintFrame);
+  }
+
+  gradientPaintFrame = requestAnimationFrame(() => {
+    gradientPaintFrame = 0;
+    paintGradientElements(gradient);
+  });
+}
+
+function applyLogoGradient(index: number, { deferElementPaint = false }: { deferElementPaint?: boolean } = {}): void {
+  const gradient = getSafeGradient(index);
+
+  document.documentElement.style.setProperty("--logo-gradient-start", gradient.colors[0]);
+  document.documentElement.style.setProperty("--logo-gradient-end", gradient.colors[1]);
+  document.body?.setAttribute("data-logo-gradient", gradient.key);
+
+  if (deferElementPaint) {
+    scheduleGradientPaint(gradient);
+    return;
+  }
+
+  paintGradientElements(gradient);
 }
 
 function applyNextLogoGradient(): void {
@@ -63,9 +91,8 @@ function handleLogoCycleClick(event: MouseEvent): void {
     event.stopPropagation();
   }
 
-  applyNextLogoGradient();
   restartAnimatedLogos();
-  applyLogoGradient(window.__abcLogoGradientIndex ?? 0);
+  applyNextLogoGradient();
 }
 
 function registerLogoCycleTriggers(): void {
@@ -121,7 +148,7 @@ function boot(): void {
   }
 
   window.__abcLogoGradientApplied = true;
-  applyLogoGradient(getInitialLogoGradientIndex());
+  applyLogoGradient(getInitialLogoGradientIndex(), { deferElementPaint: true });
   registerLogoCycleTriggers();
 }
 

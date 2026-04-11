@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap");
-
 :root {
   --bg: #040611;
   --bg-alt: #090f22;
@@ -395,44 +393,6 @@ a {
 
 /* ── Panels / cards ── */
 
-.hero,
-.panel,
-.empty-state {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.hero {
-  display: grid;
-  gap: 32px;
-  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.9fr);
-  overflow: hidden;
-  padding: 34px;
-  position: relative;
-}
-
-.hero::after {
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 5px,
-    rgba(215, 228, 248, 0.08) 6px,
-    transparent 12px
-  );
-  content: "";
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-}
-
-.hero-copy,
-.hero-meta {
-  position: relative;
-  z-index: 1;
-}
-
 /* ── Eyebrow: terminal comment style ── */
 
 .eyebrow {
@@ -505,14 +465,8 @@ p {
   margin: 0;
 }
 
-.hero-copy p {
-  margin-top: 18px;
-  max-width: 60ch;
-}
-
 /* ── Tags & pills ── */
 
-.pill-row,
 .tag-list,
 .link-list {
   display: flex;
@@ -523,7 +477,6 @@ p {
   padding: 0;
 }
 
-.pill,
 .tag {
   background: transparent;
   border-radius: 0;
@@ -587,46 +540,6 @@ p {
   line-height: 1;
   margin-left: 8px;
   transform: translateY(-1px);
-}
-
-/* ── Stats ── */
-
-.stats {
-  display: grid;
-  gap: 14px;
-}
-
-.stat {
-  background: transparent;
-  border-left: 3px solid var(--line);
-  display: grid;
-  gap: 6px;
-  padding: 18px;
-}
-
-.stat strong {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.stat span {
-  color: var(--muted);
-  font-size: 1rem;
-}
-
-/* ── Section headings ── */
-
-.section-heading {
-  align-items: flex-start;
-  border-bottom: 1px dashed var(--line);
-  display: grid;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-}
-
-.section-heading p {
-  max-width: 58ch;
 }
 
 .section-label {
@@ -701,14 +614,6 @@ p {
 
 /* ── Empty / panels ── */
 
-.empty-state,
-.panel {
-  padding: 22px;
-}
-
-.empty-state code,
-.panel code,
-.rich-content code,
 .list-item code {
   background: rgba(215, 228, 248, 0.08);
   border: 1px solid var(--line);
@@ -758,61 +663,6 @@ p {
   outline: none;
 }
 
-/* ── Split layout ── */
-
-.split {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-/* ── Rich content (tips detail) ── */
-
-.rich-content {
-  display: grid;
-  gap: 18px;
-  padding: 28px;
-  background: transparent;
-  border: none;
-  border-left: 3px solid var(--line);
-}
-
-.rich-content h2,
-.rich-content h3 {
-  margin-top: 8px;
-}
-
-.rich-content p,
-.rich-content li,
-.rich-content strong,
-.rich-content em {
-  color: var(--text);
-}
-
-.rich-content pre,
-.rich-content code {
-  font-family: var(--font-sans);
-}
-
-.rich-content pre {
-  background: rgba(2, 7, 20, 0.82);
-  border: 1px solid var(--line);
-  border-radius: 0;
-  overflow-x: auto;
-  padding: 16px;
-}
-
-.rich-content table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.rich-content th,
-.rich-content td {
-  border: 1px solid var(--line);
-  padding: 10px;
-}
-
 /* ── Links ── */
 
 .muted-link {
@@ -835,7 +685,6 @@ p {
   text-decoration: underline;
 }
 
-.rich-content a:focus-visible,
 .muted-link:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
@@ -922,16 +771,9 @@ p {
 /* ── Responsive ── */
 
 @media (max-width: 900px) {
-  .hero,
   .grid.columns-2,
-  .grid.columns-3,
-  .split {
+  .grid.columns-3 {
     grid-template-columns: 1fr;
-  }
-
-  .site-header {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 
@@ -940,16 +782,8 @@ p {
     padding: 64px 14px 40px;
   }
 
-  .site-header,
-  .hero,
-  .panel,
-  .empty-state,
   .list-item,
   .card {
     border-radius: 0;
-  }
-
-  .site-nav {
-    justify-content: flex-start;
   }
 }
