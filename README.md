@@ -2,6 +2,8 @@
 
 This repository contains the public website for the Agentic Builders Collective — a Singapore community of builders exploring agentic coding with Claude Code, Codex, Antigravity, and beyond.
 
+The `agentic-builders-collective.github.io` site is the staging environment for the production site at `agenticbuilders.sg`.
+
 ## Philosophy: GitHub as CMS
 
 This site intentionally uses **GitHub as its content management system**. All data lives in YAML and Markdown files that are version-controlled, reviewable, and contributed via Pull Requests.
@@ -27,7 +29,6 @@ This site intentionally uses **GitHub as its content management system**. All da
 - **Astro Content Collections** — typed content and data loading
 - **Single YAML files** — for structured lists (people, organisers, resources, articles, sponsors, FAQ)
 - **Markdown collections** — for narrative content (events, blog, showcase)
-- **GitHub Pages** — free static hosting
 - **No database** — by design (see Philosophy above)
 
 ## Getting started
@@ -77,19 +78,12 @@ pnpm build    # Build for production
 pnpm check    # Type check with Astro
 ```
 
-## GitHub Pages deployment
+## Environments
 
-This repo deploys to GitHub Pages via [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml).
+- Production: `https://agenticbuilders.sg/`
+- Staging: `https://agentic-builders-collective.github.io/`
 
-Canonical URL: `https://agentic-builders-collective.github.io/`
-
-For that URL to work as the root `github.io` site, the GitHub repository itself must be named `agentic-builders-collective.github.io`. If the repository stays named `website`, GitHub Pages will publish it as a project site at `https://agentic-builders-collective.github.io/website/` instead.
-
-To deploy:
-
-1. Go to `Settings` -> `Pages` on GitHub
-2. Set `Source` to `GitHub Actions`
-3. Push to `main` to trigger deployment
+Deployment automation lives in [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml).
 
 ## Notes
 

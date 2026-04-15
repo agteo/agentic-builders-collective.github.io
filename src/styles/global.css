@@ -355,14 +355,22 @@ a {
 
 /* ── Email (bottom when short, natural when long) ── */
 
-.site-email {
-  color: var(--muted);
-  display: block;
+.site-footer-contact {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
   font-family: var(--font-sans);
+  gap: 0;
+  justify-content: center;
   letter-spacing: 0.08em;
   margin-top: auto;
   padding: 48px 0 24px;
   text-align: center;
+}
+
+.site-email {
+  color: var(--muted);
+  display: inline-block;
   text-decoration: none;
 }
 
@@ -379,6 +387,21 @@ a {
 }
 
 .site-email:hover .footer-email-host {
+  color: var(--text);
+}
+
+.footer-contact-separator {
+  color: var(--muted);
+  padding: 0 0.35rem;
+}
+
+.footer-github-link {
+  color: var(--logo-gradient-start, #e0eafc);
+  display: inline-block;
+  text-decoration: none;
+}
+
+.footer-github-link:hover {
   color: var(--text);
 }
 
