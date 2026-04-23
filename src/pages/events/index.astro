@@ -2,8 +2,26 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import QRCode from "../../components/QRCode.astro";
 import { getCollection } from "astro:content";
+import { buildEventIndex, getLinkedEvent } from "../../lib/relations";
 
 const allEvents = await getCollection("events");
+const allPresentations = await getCollection("presentations");
+const eventsById = buildEventIndex(allEvents);
+const presentationsByEventId = new Map<string, typeof allPresentations>();
+for (const presentation of allPresentations) {
+  const event = getLinkedEvent(presentation.data.eventId, eventsById, `presentation "${presentation.data.id}"`);
+  if (!presentationsByEventId.has(event.id)) {
+    presentationsByEventId.set(event.id, []);
+  }
+
+  presentationsByEventId.get(event.id)!.push(presentation);
+}
+
+for (const [, presentations] of presentationsByEventId) {
+  presentations.sort((a, b) => a.data.title.localeCompare(b.data.title));
+}
+
+const getEventPresentations = (eventId: string) => presentationsByEventId.get(eventId) ?? [];
 const now = new Date();
 const formatTime = (time: string) => time.replace(/\s*SGT$/, "");
 const formatDateKey = (value: Date | string) => {
@@ -198,6 +216,25 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
     .events-panel-section.is-hidden {
       display: none;
     }
+
+    .event-related-links {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 1rem;
+      gap: 6px;
+    }
+
+    .event-related-link {
+      color: var(--accent);
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .event-related-link:hover,
+    .event-related-link:focus-visible {
+      text-decoration: underline;
+    }
   </style>
 
   <h1 class="page-title">Events</h1>
@@ -244,6 +281,17 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
                       )}
                     </div>
                   </div>
+                  {(() => {
+                    const eventPresentations = getEventPresentations(event.id);
+                    return eventPresentations.length > 0 && (
+                      <div class="event-related-links">
+                        <span>Presentations</span>
+                        {eventPresentations.map((presentation, index) => (
+                          <a class="event-related-link" href={`/showcase/#${presentation.data.id}`} title={presentation.data.title}>[{index + 1}]</a>
+                        ))}
+                      </div>
+                    );
+                  })()}
                   {showActionButtons && (
                     <div class="survey-actions">
                       {event.data.registrationUrl && (
@@ -390,6 +438,17 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
                 )}
               </div>
             </div>
+            {(() => {
+              const eventPresentations = getEventPresentations(event.id);
+              return eventPresentations.length > 0 && (
+                <div class="event-related-links">
+                  <span>Presentations</span>
+                  {eventPresentations.map((presentation, index) => (
+                    <a class="event-related-link" href={`/showcase/#${presentation.data.id}`} title={presentation.data.title}>[{index + 1}]</a>
+                  ))}
+                </div>
+              );
+            })()}
             
             {/* Post-event survey with QR */}
             {event.data.postEventSurvey?.url && event.data.postEventSurvey?.qrEnabled && (
@@ -465,6 +524,17 @@ const pastLearning = past.filter((event) => event.data.kind === "learning");
                 )}
               </div>
             </div>
+            {(() => {
+              const eventPresentations = getEventPresentations(event.id);
+              return eventPresentations.length > 0 && (
+                <div class="event-related-links">
+                  <span>Presentations</span>
+                  {eventPresentations.map((presentation, index) => (
+                    <a class="event-related-link" href={`/showcase/#${presentation.data.id}`} title={presentation.data.title}>[{index + 1}]</a>
+                  ))}
+                </div>
+              );
+            })()}
             
             {/* Post-event survey with QR */}
             {event.data.postEventSurvey?.url && event.data.postEventSurvey?.qrEnabled && (

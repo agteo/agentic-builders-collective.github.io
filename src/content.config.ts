@@ -4,6 +4,14 @@ import { z } from "astro/zod";
 
 const kebabCaseId = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const optionalUrl = z.union([z.url(), z.literal("")]).optional().default("");
+const personRef = z.object({
+  personId: kebabCaseId.optional(),
+  name: z.string().optional(),
+}).refine((ref) => ref.personId || ref.name, {
+  message: "Expected a personId for linked people or a name for unlinked people.",
+});
+const personRefs = z.array(personRef).default([]);
+const legacyPersonRefs = z.array(z.union([z.string(), personRef])).default([]);
 
 const members = defineCollection({
   loader: file("src/content/members/members.yaml"),
@@ -23,7 +31,7 @@ const members = defineCollection({
 const organisers = defineCollection({
   loader: file("src/content/organisers/organisers.yaml"),
   schema: z.object({
-    id: z.string().optional().default(""),
+    id: kebabCaseId,
     name: z.string(),
     aliases: z.array(z.string()).default([]),
     role: z.string(),
@@ -47,24 +55,13 @@ const sponsors = defineCollection({
   }),
 });
 
-const blog = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    author: z.string().optional().default(""),
-    summary: z.string().optional().default(""),
-    tags: z.array(z.string()).default([]),
-  }),
-});
-
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
   schema: z.object({
     title: z.string(),
-    author: z.string().optional().default(""),
-    url: z.string().optional().default(""),
-    github: z.string().optional().default(""),
+    makers: personRefs,
+    url: optionalUrl,
+    github: optionalUrl,
     screenshot: z.string().optional().default(""),
     builtWith: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
@@ -78,9 +75,8 @@ const presentations = defineCollection({
   schema: z.object({
     id: kebabCaseId,
     title: z.string(),
-    speaker: z.string().optional().default(""),
-    event: z.string().optional().default(""),
-    date: z.coerce.date(),
+    speakers: personRefs,
+    eventId: kebabCaseId,
     url: optionalUrl,
     slidesUrl: optionalUrl,
     videoUrl: optionalUrl,
@@ -102,8 +98,8 @@ const events = defineCollection({
     sponsorUrl: z.string().optional().default(""),
     registrationUrl: z.string().optional().default(""),
     attendance: z.number().optional().default(0),
-    speakers: z.array(z.string()).default([]),
-    hosts: z.array(z.string()).default([]),
+    speakers: legacyPersonRefs,
+    hosts: legacyPersonRefs,
     tags: z.array(z.string()).default([]),
     status: z.enum(["upcoming", "past"]).default("past"),
     preEventSurvey: z.object({
@@ -137,11 +133,13 @@ const events = defineCollection({
 const articles = defineCollection({
   loader: file("src/content/articles/articles.yaml"),
   schema: z.object({
+    id: kebabCaseId,
     title: z.string(),
-    author: z.string(),
-    url: z.string(),
+    authors: personRefs,
+    url: z.url(),
     publication: z.string().optional().default(""),
     date: z.coerce.date(),
+    summary: z.string().optional().default(""),
     tags: z.array(z.string()).default([]),
   }),
 });
@@ -160,7 +158,6 @@ export const collections = {
   members,
   organisers,
   sponsors,
-  blog,
   projects,
   presentations,
   events,

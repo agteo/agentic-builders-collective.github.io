@@ -9,6 +9,18 @@ There are two patterns in the current repo:
 
 For YAML-backed collections, the file contains an array of entries. For Markdown-backed collections, each file is one entry and the filename acts as the stable identifier.
 
+## Relationships
+
+People live in `members` and `organisers`. Linked author/speaker/maker fields use `personId` when the person is listed on the Community page, or `name` when the person should render as plain text with no link.
+
+```yaml
+authors:
+  - personId: jane-doe
+  - name: External Author
+```
+
+If a `personId` or `eventId` points at a missing entry, the build fails.
+
 ## Collections
 
 ### `members`
@@ -59,11 +71,15 @@ File: `src/content/articles/articles.yaml`
 Use YAML for community-curated articles, external coverage, interviews, guides, or press-style links.
 
 ```yaml
-- title: How Singapore's builders are using coding agents
-  author: Jane Doe
+- id: singapore-agent-builders
+  title: How Singapore's builders are using coding agents
+  authors:
+    - personId: jane-doe
+    - name: External Author
   url: https://example.com/story
   publication: Example Times
   date: 2026-03-24
+  summary: A short summary of the article.
   tags:
     - community
     - agents
@@ -109,7 +125,8 @@ time: 7:00 PM - 9:00 PM SGT
 venue: Example Labs
 registrationUrl: https://example.com/register
 hosts:
-  - Jane Doe
+  - personId: jane-doe
+  - name: External Host
 tags:
   - meetup
 status: upcoming
@@ -158,26 +175,6 @@ Survey workflow:
 
 See `docs/surveys.md` for detailed survey setup instructions.
 
-### `blog`
-
-Directory: `src/content/blog/`
-
-Use Markdown for posts that need prose, links, code blocks, or richer formatting.
-
-```md
----
-title: How we review AI-assisted code changes
-date: 2026-03-24
-author: Jane Doe
-summary: A short guide to keeping generated changes reviewable.
-tags:
-  - review
-  - workflow
----
-
-Write the post here.
-```
-
 ### `projects`
 
 Directory: `src/content/projects/`
@@ -187,7 +184,9 @@ Use Markdown for projects that need screenshots, summaries, and body copy.
 ```md
 ---
 title: Eval Dashboard
-author: Jane Doe
+makers:
+  - personId: jane-doe
+  - name: External Maker
 url: https://example.com
 github: https://github.com/janedoe/eval-dashboard
 screenshot: /images/showcase/eval-dashboard.png
@@ -211,9 +210,9 @@ Use YAML for talk, demo, and workshop presentation links.
 ```yaml
 - id: evals-for-agents
   title: Evals for Agents
-  speaker: Jane Doe
-  event: "#7 - Agentic Builders at Example Labs"
-  date: 2026-05-14
+  speakers:
+    - personId: jane-doe
+  eventId: abc-7-example-labs
   url: https://example.com/talk
   slidesUrl: https://example.com/slides
   videoUrl: https://example.com/video

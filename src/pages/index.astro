@@ -3,14 +3,9 @@ import "../styles/global.css";
 import SiteHead from "../components/SiteHead.astro";
 import { getCollection } from "astro:content";
 
-const allBlog = await getCollection("blog");
 const allEvents = await getCollection("events");
 const allFaq = await getCollection("faq");
 const homepageFaq = allFaq.sort((a, b) => a.data.order - b.data.order);
-
-const latestPosts = allBlog
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 4);
 
 const now = new Date();
 const upcomingEvent = allEvents

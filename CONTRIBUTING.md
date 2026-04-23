@@ -59,6 +59,30 @@ Optional fields:
 
 If the file currently contains `[]`, replace it with the first list entry. Otherwise, append a new list entry.
 
+## Linked People And Events
+
+Use `personId` when an author, maker, or speaker is listed in `src/content/members/members.yaml` or `src/content/organisers/organisers.yaml`. Use `name` for external people who should render as plain text.
+
+```yaml
+authors:
+  - personId: jane-doe
+  - name: External Author
+```
+
+Presentations must link to an event by filename-derived `eventId`.
+
+```yaml
+- id: evals-for-agents
+  title: Evals for Agents
+  speakers:
+    - personId: jane-doe
+  eventId: abc-7-example-labs
+  slidesUrl: https://example.com/slides
+  summary: A practical walkthrough of eval loops for agentic coding.
+```
+
+If a `personId` or `eventId` is wrong, `pnpm build` fails.
+
 ## Validate Locally
 
 ```sh

@@ -1,17 +1,26 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { buildEventIndex, buildPeopleIndex, getLinkedEvent, resolvePersonRefs } from "../../lib/relations";
 
 const allProjects = await getCollection("projects");
 const allPresentations = await getCollection("presentations");
+const allEvents = await getCollection("events");
+const allMembers = await getCollection("members");
+const organisers = await getCollection("organisers");
+const peopleById = buildPeopleIndex([...organisers, ...allMembers]);
+const eventsById = buildEventIndex(allEvents);
 
 const projects = allProjects.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
-const presentations = allPresentations.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const presentations = allPresentations
+  .map((presentation) => ({
+    presentation,
+    event: getLinkedEvent(presentation.data.eventId, eventsById, `presentation "${presentation.data.id}"`),
+  }))
+  .sort((a, b) => new Date(b.event.data.date).getTime() - new Date(a.event.data.date).getTime());
 ---
 
 <BaseLayout
@@ -25,7 +34,7 @@ const presentations = allPresentations.sort(
     {projects.length > 0 ? (
       <div class="list">
         {projects.map((project) => (
-          <article class="list-item">
+          <article class="list-item" id={project.id}>
             {project.data.screenshot && (
               <img
                 src={project.data.screenshot}
@@ -46,7 +55,23 @@ const presentations = allPresentations.sort(
                 )}
               </span>
               <div class="card-meta">
-                {project.data.author && <span>{project.data.author}</span>}
+                {(() => {
+                  const makers = resolvePersonRefs(project.data.makers, peopleById, `project "${project.id}" makers`);
+                  return makers.length > 0 && (
+                    <span>
+                      {makers.map((maker, index) => (
+                        <>
+                          {maker.href ? (
+                            <a href={maker.href}>{maker.name}</a>
+                          ) : (
+                            maker.name
+                          )}
+                          {index < makers.length - 1 && ", "}
+                        </>
+                      ))}
+                    </span>
+                  );
+                })()}
                 <span>{new Date(project.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short" })}</span>
               </div>
             </div>
@@ -78,7 +103,7 @@ const presentations = allPresentations.sort(
     <h3 class="section-label">Presentations</h3>
     {presentations.length > 0 ? (
       <div class="list">
-        {presentations.map((presentation) => (
+        {presentations.map(({ presentation, event }) => (
           <article class="list-item" id={presentation.data.id}>
             <div class="list-item-header">
               <span class="list-item-title">
@@ -89,9 +114,25 @@ const presentations = allPresentations.sort(
                 )}
               </span>
               <div class="card-meta">
-                {presentation.data.speaker && <span>{presentation.data.speaker}</span>}
-                {presentation.data.event && <span>{presentation.data.event}</span>}
-                <span>{new Date(presentation.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short" })}</span>
+                {(() => {
+                  const speakers = resolvePersonRefs(presentation.data.speakers, peopleById, `presentation "${presentation.data.id}" speakers`);
+                  return speakers.length > 0 && (
+                    <span>
+                      {speakers.map((speaker, index) => (
+                        <>
+                          {speaker.href ? (
+                            <a href={speaker.href}>{speaker.name}</a>
+                          ) : (
+                            speaker.name
+                          )}
+                          {index < speakers.length - 1 && ", "}
+                        </>
+                      ))}
+                    </span>
+                  );
+                })()}
+                <span><a href={`/events/#${event.id}`}>{event.data.title}</a></span>
+                <span>{new Date(event.data.date).toLocaleDateString("en-SG", { year: "numeric", month: "short" })}</span>
               </div>
             </div>
             {presentation.data.summary && <p>{presentation.data.summary}</p>}

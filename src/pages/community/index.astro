@@ -1,9 +1,16 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { buildEventIndex, buildPeopleIndex, getLinkedEvent, resolvePersonRefs } from "../../lib/relations";
 
 const allMembers = await getCollection("members");
 const organisers = await getCollection("organisers");
+const allArticles = await getCollection("articles");
+const allProjects = await getCollection("projects");
+const allPresentations = await getCollection("presentations");
+const allEvents = await getCollection("events");
+const peopleById = buildPeopleIndex([...organisers, ...allMembers]);
+const eventsById = buildEventIndex(allEvents);
 
 const orgNames = new Set(organisers.map((o) => o.data.name));
 const members = allMembers
@@ -15,6 +22,95 @@ const members = allMembers
 
     return a.data.name.localeCompare(b.data.name);
   });
+
+type BackrefGroup = {
+  label: string;
+  items: {
+    href: string;
+    title: string;
+  }[];
+};
+
+const backrefsByPersonId = new Map<string, Map<string, BackrefGroup["items"]>>();
+const backrefLabels = new Map([
+  ["articles", "articles"],
+  ["projects", "projects"],
+  ["presentations", "presentations"],
+  ["events", "events"],
+]);
+
+const addBackref = (personId: string, group: string, href: string, title: string) => {
+  if (!backrefsByPersonId.has(personId)) {
+    backrefsByPersonId.set(personId, new Map());
+  }
+
+  const personBackrefs = backrefsByPersonId.get(personId)!;
+  if (!personBackrefs.has(group)) {
+    personBackrefs.set(group, []);
+  }
+
+  const groupItems = personBackrefs.get(group)!;
+  if (!groupItems.some((item) => item.href === href)) {
+    groupItems.push({ href, title });
+  }
+};
+
+for (const article of allArticles) {
+  resolvePersonRefs(article.data.authors, peopleById, `article "${article.data.id}" authors`);
+  for (const author of article.data.authors) {
+    if (author.personId) {
+      addBackref(author.personId, "articles", `/articles/#${article.data.id}`, article.data.title);
+    }
+  }
+}
+
+for (const project of allProjects) {
+  resolvePersonRefs(project.data.makers, peopleById, `project "${project.id}" makers`);
+  for (const maker of project.data.makers) {
+    if (maker.personId) {
+      addBackref(maker.personId, "projects", `/showcase/#${project.id}`, project.data.title);
+    }
+  }
+}
+
+for (const presentation of allPresentations) {
+  const event = getLinkedEvent(presentation.data.eventId, eventsById, `presentation "${presentation.data.id}"`);
+  resolvePersonRefs(presentation.data.speakers, peopleById, `presentation "${presentation.data.id}" speakers`);
+
+  for (const speaker of presentation.data.speakers) {
+    if (speaker.personId) {
+      addBackref(speaker.personId, "presentations", `/showcase/#${presentation.data.id}`, presentation.data.title);
+      addBackref(speaker.personId, "events", `/events/#${event.id}`, event.data.title);
+    }
+  }
+}
+
+for (const event of allEvents) {
+  resolvePersonRefs(event.data.hosts, peopleById, `event "${event.id}" hosts`);
+  resolvePersonRefs(event.data.speakers, peopleById, `event "${event.id}" speakers`);
+
+  for (const host of event.data.hosts) {
+    if (typeof host !== "string" && host.personId) {
+      addBackref(host.personId, "events", `/events/#${event.id}`, event.data.title);
+    }
+  }
+
+  for (const speaker of event.data.speakers) {
+    if (typeof speaker !== "string" && speaker.personId) {
+      addBackref(speaker.personId, "events", `/events/#${event.id}`, event.data.title);
+    }
+  }
+}
+
+const getBackrefGroups = (personId: string): BackrefGroup[] => {
+  const personBackrefs = backrefsByPersonId.get(personId);
+  if (!personBackrefs) return [];
+
+  return Array.from(backrefLabels.entries()).flatMap(([key, label]) => {
+    const items = personBackrefs.get(key) ?? [];
+    return items.length > 0 ? [{ label, items }] : [];
+  });
+};
 ---
 
 <BaseLayout
@@ -55,6 +151,21 @@ const members = allMembers
               <a class="muted-link" href={person.data.github} target="_blank" rel="noopener">GitHub</a>
             )}
           </div>
+          {(() => {
+            const backrefGroups = getBackrefGroups(person.data.id);
+            return backrefGroups.length > 0 && (
+              <div class="person-card-backrefs">
+                {backrefGroups.map((group) => (
+                  <div class="person-card-backref-group">
+                    <span class="person-card-backref-label">{group.label}</span>
+                    {group.items.map((item, index) => (
+                      <a class="person-card-backref-link" href={item.href} title={item.title}>[{index + 1}]</a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       ))}
     </div>
@@ -87,6 +198,21 @@ const members = allMembers
                 <a class="muted-link" href={person.data.github} target="_blank" rel="noopener">GitHub</a>
               )}
             </div>
+            {(() => {
+              const backrefGroups = getBackrefGroups(person.data.id);
+              return backrefGroups.length > 0 && (
+                <div class="person-card-backrefs">
+                  {backrefGroups.map((group) => (
+                    <div class="person-card-backref-group">
+                      <span class="person-card-backref-label">{group.label}</span>
+                      {group.items.map((item, index) => (
+                        <a class="person-card-backref-link" href={item.href} title={item.title}>[{index + 1}]</a>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         ))}
       </div>
@@ -95,3 +221,34 @@ const members = allMembers
     )}
   </section>
 </BaseLayout>
+
+<style>
+  .person-card-backrefs {
+    color: var(--muted);
+    display: grid;
+    font-size: 1rem;
+    gap: 4px;
+    opacity: 0.85;
+  }
+
+  .person-card-backref-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .person-card-backref-label {
+    color: var(--muted);
+  }
+
+  .person-card-backref-link {
+    color: var(--accent);
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .person-card-backref-link:hover,
+  .person-card-backref-link:focus-visible {
+    text-decoration: underline;
+  }
+</style>
