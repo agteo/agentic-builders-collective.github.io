@@ -22,6 +22,7 @@ This repo is an Astro site for the Agentic Builders Collective. Keep durable beh
 - Default to one file per Markdown entry; YAML collections stay in their existing array file.
 - Use YAML for `members`, `organisers`, `articles`, `presentations`, `sponsors`, and `faq`.
 - Use Markdown for `events` and `projects`.
+- Use `YYYY-MM-DD-name.md` filenames for events because the filename becomes the `eventId`.
 - Prefer kebab-case filenames or explicit `id` values because Astro uses them as stable ids.
 - Keep contributor changes additive and localised to a single collection where possible.
 - Use `personId` for listed members/organisers and `name` for external people; use `eventId` to link presentations to events.

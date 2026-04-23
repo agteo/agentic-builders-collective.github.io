@@ -87,7 +87,7 @@ Presentations must link to an event by filename-derived `eventId`.
   title: Evals for Agents
   speakers:
     - personId: jane-doe
-  eventId: abc-7-example-labs
+  eventId: 2026-05-14-agentic-builders-at-example-labs
   slidesUrl: https://example.com/slides
   summary: A practical walkthrough of eval loops for agentic coding.
 ```

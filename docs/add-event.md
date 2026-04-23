@@ -10,7 +10,7 @@ Add this event to the Agentic Builders Collective website.
 Follow docs/add-event.md.
 Follow docs/id-guidelines.md for the filename/eventId.
 Create one new Markdown file in src/content/events/.
-Use a kebab-case filename because it becomes the eventId.
+Use a YYYY-MM-DD-prefixed kebab-case filename because it becomes the eventId.
 Use personId for listed hosts/speakers, or name for external people.
 Keep the change additive and do not reformat unrelated entries.
 Run pnpm check and pnpm build.
@@ -32,7 +32,7 @@ Event:
 
 ## File
 
-Create `src/content/events/<event-id>.md`.
+Create `src/content/events/<yyyy-mm-dd-event-name>.md`.
 
 ```md
 ---
@@ -59,7 +59,8 @@ An evening of demos, discussions, and community building.
 ## Notes
 
 - The filename becomes the `eventId` used by presentations.
-- Do not use random numeric suffixes. If the event title collides, add the date or venue to the filename.
+- Event filenames must start with the event date as `YYYY-MM-DD`, for example `2026-05-14-agentic-builders-at-example-labs.md`.
+- Do not use random numeric suffixes. If the event title collides, add the venue or format to the filename.
 - `kind` must be `meetup` or `learning`.
 - `status` must be `upcoming` or `past`.
 - Use `personId` only when the person exists in `members` or `organisers`.
