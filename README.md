@@ -90,6 +90,12 @@ pnpm build    # Build for production, including /logo-generator from the submodu
 pnpm check    # Type check with Astro
 ```
 
+`pnpm dev` can run the main site without the `logo-generator/` submodule. `pnpm build` will try to initialise the submodule if it is missing because production output includes `/logo-generator`. If Git cannot do that automatically, run:
+
+```sh
+git submodule update --init --recursive
+```
+
 ## Environments
 
 - Production: `https://agenticbuilders.sg/`

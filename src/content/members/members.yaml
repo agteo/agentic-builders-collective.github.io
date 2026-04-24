@@ -1,5 +1,16 @@
+- id: gaurav-manek
+  name: Gaurav Manek
+  aliases: []
+  tagline: ""
+  company: Ocellivision
+  website: https://ocelli.vision
+  linkedin: https://www.linkedin.com/in/gauravmanek/
+  github: https://github.com/gauravmm
+  featured: false
+
 - id: shiyan-koh
   name: Shiyan Koh
+  aliases: []
   tagline: Claudify it all!
   company: Hustle Fund
   website: https://www.hustlefund.vc

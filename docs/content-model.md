@@ -126,6 +126,7 @@ Use YAML for short homepage FAQs. Keep entries in one array and use an explicit 
 Directory: `src/content/events/`
 
 Use Markdown when the entry needs body copy as well as event metadata. Each file is one event.
+The filename becomes the `eventId`, and must use `YYYY-MM-DD-name.md`.
 
 ```md
 ---
@@ -223,7 +224,7 @@ Use YAML for talk, demo, and workshop presentation links.
   title: Evals for Agents
   speakers:
     - personId: jane-doe
-  eventId: abc-7-example-labs
+  eventId: 2026-05-14-agentic-builders-at-example-labs
   url: https://example.com/talk
   slidesUrl: https://example.com/slides
   videoUrl: https://example.com/video
@@ -235,6 +236,6 @@ Use YAML for talk, demo, and workshop presentation links.
 
 ## Naming guidance
 
-- Use kebab-case filenames for Markdown entries.
+- Use `YYYY-MM-DD-name.md` filenames for events and kebab-case filenames for other Markdown entries.
 - Keep YAML arrays tidy and append new items without reformatting unrelated entries.
 - Keep each pull request focused on one content type when possible.

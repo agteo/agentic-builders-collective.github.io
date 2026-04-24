@@ -29,7 +29,7 @@ Presentation:
 
 Edit `src/content/presentations/presentations.yaml`.
 
-The `eventId` is the event filename without `.md`, for example `lorong-ai-mar-2026` from `src/content/events/lorong-ai-mar-2026.md`.
+The `eventId` is the event filename without `.md`, for example `2026-05-14-agentic-builders-at-example-labs` from `src/content/events/2026-05-14-agentic-builders-at-example-labs.md`.
 
 ```yaml
 - id: evals-for-agents
@@ -37,7 +37,7 @@ The `eventId` is the event filename without `.md`, for example `lorong-ai-mar-20
   speakers:
     - personId: jane-doe
     - name: External Speaker
-  eventId: lorong-ai-mar-2026
+  eventId: 2026-05-14-agentic-builders-at-example-labs
   url: https://example.com/talk
   slidesUrl: https://example.com/slides
   videoUrl: https://example.com/video

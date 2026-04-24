@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { createReadStream, existsSync } from "node:fs";
 import { cp, mkdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
@@ -13,15 +14,39 @@ const contentTypes = new Map([
   [".txt", "text/plain; charset=utf-8"],
 ]);
 
+function hasLogoGenerator(sourceDir) {
+  return existsSync(path.join(sourceDir, "index.html"));
+}
+
+function ensureLogoGeneratorSubmodule({ rootDir, sourceDir }) {
+  if (hasLogoGenerator(sourceDir)) {
+    return;
+  }
+
+  try {
+    console.log("Initialising logo-generator submodule...");
+    execFileSync("git", ["submodule", "update", "--init", "--recursive", "logo-generator"], {
+      cwd: rootDir,
+      stdio: "inherit",
+    });
+  } catch {
+    throw new Error(
+      "Cannot publish /logo-generator because the logo-generator submodule is missing and automatic initialisation failed. Run `git submodule update --init --recursive` before building."
+    );
+  }
+
+  if (!hasLogoGenerator(sourceDir)) {
+    throw new Error(
+      "Cannot publish /logo-generator because the logo-generator submodule is still missing after initialisation. Run `git submodule update --init --recursive` before building."
+    );
+  }
+}
+
 export async function copyLogoGenerator({ rootDir = repoRoot, outDir = path.join(repoRoot, "dist") } = {}) {
   const sourceDir = path.join(rootDir, "logo-generator");
   const targetDir = path.join(outDir, "logo-generator");
 
-  if (!existsSync(path.join(sourceDir, "index.html"))) {
-    throw new Error(
-      "Cannot publish /logo-generator because the logo-generator submodule is missing. Run `git submodule update --init --recursive` before building."
-    );
-  }
+  ensureLogoGeneratorSubmodule({ rootDir, sourceDir });
 
   await rm(targetDir, { recursive: true, force: true });
   await mkdir(targetDir, { recursive: true });
