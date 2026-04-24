@@ -70,6 +70,17 @@ Optional fields:
 
 If the file currently contains `[]`, replace it with the first list entry. Otherwise, append a new list entry.
 
+## Open A Pull Request Without Write Access
+
+You do not need write access to contribute.
+
+1. Fork the repository to your own GitHub account.
+2. Make your change in your fork.
+3. Commit and push the change to a branch in your fork.
+4. Open a pull request back to `agentic-builders-collective/agentic-builders-collective.github.io`.
+
+On GitHub, use **Fork**, then after committing use **Contribute -> Open pull request**.
+
 ## Linked People And Events
 
 Use `personId` when an author, maker, or speaker is listed in `src/content/members/members.yaml` or `src/content/organisers/organisers.yaml`. Use `name` for external people who should render as plain text.
